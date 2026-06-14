@@ -1,0 +1,59 @@
+{
+  "name": "fetch-xhr",
+  "version": "0.0.1-beta",
+  "license": "MIT",
+  "author": "Xingzeng Bao",
+  "homepage": "https://github.com/baoxingzeng/fetch-xhr",
+  "description": "A globalThis.fetch JavaScript polyfill.",
+  "type": "module",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "README.md",
+    "dist",
+    "!dist/types/**/*",
+    "!dist/cjs/types/**/*",
+    "!dist/esm/types/**/*"
+  ],
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./dev": {
+      "require": "./dist/cjs/dev.js",
+      "import": "./dist/esm/dev.js",
+      "types": "./dist/dev.d.ts"
+    },
+    "./polyfill": {
+      "require": "./dist/cjs/polyfill.js",
+      "import": "./dist/esm/polyfill.js"
+    }
+  },
+  "sideEffects": [
+    "./dist/cjs/polyfill.js",
+    "./dist/esm/polyfill.js"
+  ],
+  "scripts": {
+    "build": "rollup --config",
+    "test": "node tests/test.js"
+  },
+  "keywords": [
+    "fetch",
+    "polyfill"
+  ],
+  "devDependencies": {
+    "@rollup/plugin-terser": "^1.0.0",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "formidable": "^3.5.4",
+    "rollup": "^4.61.0",
+    "rollup-plugin-dts": "^6.4.1",
+    "tslib": "^2.8.1",
+    "uvu": "^0.5.6",
+    "xhr2": "^0.2.1"
+  }
+}

@@ -1,0 +1,51 @@
+import { suite } from "uvu";
+import * as assert from "uvu/assert";
+import { Protagonist } from "./exports.js";
+import { ui_rec, isTargetType } from "./utils.js";
+
+const _name = "File";
+export const _test = suite(_name);
+
+/**
+ * @param {string} n 
+ * @param {Parameters<typeof _test>[1]} t 
+ */
+const test = (n, t) => {
+    return _test(...ui_rec(_name, n, t));
+}
+
+/**
+ * 
+ * @param {globalThis.File} file 
+ * @param {string} expectedName 
+ * @param {number} expectedLastModified 
+ */
+const compare = (file, expectedName, expectedLastModified) => {
+    assert.equal(file.name, expectedName);
+    assert.equal(file.lastModified, expectedLastModified);
+}
+
+test("name keep the incoming file name as is", () => {
+    assert.equal((new Protagonist.File([], "/path/to/test.txt")).name, "/path/to/test.txt");
+    assert.equal((new Protagonist.File([], "C:\\folder\\demo.json")).name, "C:\\folder\\demo.json");
+    assert.equal((new Protagonist.File([], "src/assets/img.png")).name, "src/assets/img.png");
+    assert.equal((new Protagonist.File([], "/")).name, "/");
+    assert.equal((new Protagonist.File([], "")).name, "");
+    assert.equal((new Protagonist.File([], "readme.md")).name, "readme.md");
+    assert.equal((new Protagonist.File([], "File@Name#123.txt")).name, "File@Name#123.txt");
+});
+
+test("lastModified custom value + default value", () => {
+    let file1 = new Protagonist.File([], "custom.txt", { lastModified: 1719235200000 });
+    compare(file1, "custom.txt", 1719235200000);
+    let before = Date.now();
+    let file2 = new Protagonist.File([], "default.txt");
+    let after = Date.now();
+    assert.ok(file2.lastModified >= before && file2.lastModified <= after);
+});
+
+test("slice return Blob instead of File", () => {
+    let file = new Protagonist.File(["test"], "slice.txt");
+    let sliced = file.slice(0, 2);
+    assert.not.ok(isTargetType("File", sliced));
+});
