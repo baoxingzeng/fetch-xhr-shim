@@ -73,7 +73,6 @@ export class BlobP implements Blob {
                     return chunk.arrayBuffer().then((function (this: Blob, buffer: ArrayBuffer) {
                         let uint8array = new Uint8Array(buffer);
                         let bytesRead = uint8array.byteLength;
-
                         position += bytesRead;
                         (v as Uint8Array).set(uint8array);
                         controller.byobRequest?.respond(bytesRead);
