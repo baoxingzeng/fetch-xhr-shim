@@ -1,6 +1,6 @@
 {
   "name": "fetch-xhr-shim",
-  "version": "0.0.1-beta",
+  "version": "0.99.0-beta",
   "license": "MIT",
   "author": "Xingzeng Bao",
   "homepage": "https://github.com/baoxingzeng/fetch-xhr-shim",
