@@ -20,7 +20,21 @@ export default [
         ],
     },
 
-    // CommonJS (minimized)
+    // CommonJS (singlefile)
+    {
+        input: "src/index.ts",
+        output: {
+            file: "dist/fetch-xhr-shim.cjs.js",
+            format: "cjs",
+        },
+        plugins: [
+            typescript({
+                declarationDir: "dist/types",
+                ignoreDeprecations: "6.0",
+            }),
+        ],
+    },
+    // CommonJS (singlefile, minimized)
     {
         input: "src/index.ts",
         output: {
@@ -53,7 +67,21 @@ export default [
         ],
     },
 
-    // ES6 (minimized)
+    // ES6 (singlefile)
+    {
+        input: "src/index.ts",
+        output: {
+            file: "dist/fetch-xhr-shim.esm.js",
+            format: "es",
+        },
+        plugins: [
+            typescript({
+                declarationDir: "dist/types",
+                ignoreDeprecations: "6.0",
+            }),
+        ],
+    },
+    // ES6 (singlefile, minimized)
     {
         input: "src/index.ts",
         output: {
