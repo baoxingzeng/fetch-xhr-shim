@@ -1,15 +1,17 @@
-# fetch-xhr-shim
+# fetch-xhr-shim <!-- omit in toc -->
 
-A comprehensive polyfill for the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) and its entire ecosystem — `fetch`, `Blob`, `FormData`, `Headers`, `Request`, `Response`, `AbortController`, and more. All network requests go through `XMLHttpRequest` under the hood, so it works anywhere XHR is available: browsers, Node.js, mini-programs, you name it.
+A comprehensive polyfill for the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) 
+and its entire ecosystem — `fetch`, `Blob`, `FormData`, `Headers`, `Request`, `Response`, `AbortController`, 
+and more. All network requests go through `XMLHttpRequest` under the hood, 
+so it works anywhere XHR is available: browsers, Node.js, mini-programs, you name it.
 
 When a native implementation exists, it's used directly. When it doesn't, the polyfill kicks in.
 
-## Table of Contents
+## Table of Contents <!-- omit in toc -->
 
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-  - [Importing](#importing)
   - [fetch](#fetch)
   - [Request](#request)
   - [Response](#response)
@@ -24,9 +26,6 @@ When a native implementation exists, it's used directly. When it doesn't, the po
   - [TextEncoder](#textencoder)
   - [TextDecoder](#textdecoder)
 - [Fix Functions](#fix-functions)
-  - [fixFetch](#fixfetch)
-  - [fixXMLHttpRequest](#fixxmlhttprequest)
-  - [fixWebSocket](#fixwebsocket)
 - [Auto Import](#auto-import)
 - [Node.js](#nodejs)
 - [License](#license)
@@ -50,16 +49,16 @@ When a native implementation exists, it's used directly. When it doesn't, the po
 npm install fetch-xhr-shim
 ```
 
-## Usage
-
-### Importing
+### Importing <!-- omit in toc -->
 
 To polyfill `globalThis.fetch` and all related APIs automatically:
 
 ```js
 import "fetch-xhr-shim/polyfill";
 
-fetch("https://www.npmjs.com");
+fetch("http://example.com/movies.json")
+    .then((response) => response.json())
+    .then((data) => console.log(data));
 ```
 
 If you prefer explicit imports, every module has two export variants:
@@ -74,9 +73,11 @@ import { fetchP } from "fetch-xhr-shim";   // always the polyfill version
 
 This pattern applies to every API: `Blob` / `BlobP`, `FormData` / `FormDataP`, `Headers` / `HeadersP`, and so on.
 
+## Usage
+
 ### fetch
 
-#### Example
+#### Example <!-- omit in toc -->
 
 ```javascript
 import { fetch } from "fetch-xhr-shim";
@@ -86,7 +87,7 @@ fetch("http://example.com/movies.json")
     .then((data) => console.log(data));
 ```
 
-#### POST JSON
+##### POST JSON <!-- omit in toc -->
 
 ```javascript
 import { fetch } from "fetch-xhr-shim";
@@ -109,7 +110,7 @@ fetch("https://example.com/profile", {
     });
 ```
 
-#### Upload files
+##### Upload files <!-- omit in toc -->
 
 ```javascript
 import { fetch, File, FormData } from "fetch-xhr-shim";
@@ -140,23 +141,23 @@ import { setXMLHttpRequestClass } from "fetch-xhr-shim";
 setXMLHttpRequestClass(another_XMLHttpRequest_Class);
 ```
 
-| Syntax | Supported |
-|--------|-----------|
-| `fetch(resource)` | ✔ |
-| `fetch(resource, options)` | ✔ |
+| Syntax                     | Supported |
+| -------------------------- | --------- |
+| `fetch(resource)`          | ✔         |
+| `fetch(resource, options)` | ✔         |
 
 > See [Request](#request) for option compatibility.
 
 ### Request
 
-#### Example
+#### Example <!-- omit in toc -->
 
 ```javascript
 import { fetch, Request } from "fetch-xhr-shim";
 
-const request = new Request("https://www.mozilla.org/favicon.ico");
+const request = new Request("https://example.com/favicon.ico");
 
-console.log(request.url);         // "https://www.mozilla.org/favicon.ico"
+console.log(request.url);         // "https://example.com/favicon.ico"
 console.log(request.method);      // "GET"
 console.log(request.credentials); // "same-origin"
 
@@ -196,43 +197,43 @@ fetch(request)
     });
 ```
 
-#### Compatibility
+#### Compatibility <!-- omit in toc -->
 
 **Properties**
 
-| Property | Supported |
-|----------|-----------|
-| `body` | ✖ |
-| `bodyUsed` | ✔ |
-| `cache` | ✔ |
-| `credentials` | ✔ |
-| `destination` | ✖ |
-| `headers` | ✔ |
-| `integrity` | ✖ |
-| `keepalive` | ✖ |
-| `method` | ✔ |
-| `mode` | ✖ |
-| `redirect` | ✖ |
-| `referrer` | ✖ |
-| `referrerPolicy` | ✖ |
-| `signal` | ✔ |
-| `url` | ✔ |
+| Property         | Supported |
+| ---------------- | --------- |
+| `body`           | ✖         |
+| `bodyUsed`       | ✔         |
+| `cache`          | ✔         |
+| `credentials`    | ✔         |
+| `destination`    | ✖         |
+| `headers`        | ✔         |
+| `integrity`      | ✖         |
+| `keepalive`      | ✖         |
+| `method`         | ✔         |
+| `mode`           | ✖         |
+| `redirect`       | ✖         |
+| `referrer`       | ✖         |
+| `referrerPolicy` | ✖         |
+| `signal`         | ✔         |
+| `url`            | ✔         |
 
 **Methods**
 
-| Method | Supported |
-|--------|-----------|
-| `arrayBuffer()` | ✔ |
-| `blob()` | ✔ |
-| `bytes()` | ✔ |
-| `clone()` | ✔ |
-| `formData()` | ✔ |
-| `json()` | ✔ |
-| `text()` | ✔ | 
+| Method          | Supported |
+| --------------- | --------- |
+| `arrayBuffer()` | ✔         |
+| `blob()`        | ✔         |
+| `bytes()`       | ✔         |
+| `clone()`       | ✔         |
+| `formData()`    | ✔         |
+| `json()`        | ✔         |
+| `text()`        | ✔         |
 
 ### Response
 
-#### Example
+#### Example <!-- omit in toc -->
 
 ```javascript
 import { Response, Blob, fetch } from "fetch-xhr-shim";
@@ -242,37 +243,37 @@ const myOptions = { status: 200, statusText: "SuperSmashingGreat!" };
 const myResponse = new Response(myBlob, myOptions);
 ```
 
-#### Compatibility
+#### Compatibility <!-- omit in toc -->
 
 **Properties**
 
-| Property | Supported |
-|----------|-----------|
-| `body` | ✖ |
-| `bodyUsed` | ✔ |
-| `headers` | ✔ |
-| `ok` | ✔ |
-| `redirected` | ✖ |
-| `status` | ✔ |
-| `statusText` | ✔ |
-| `type` | ✖ |
-| `url` | ✔ |
+| Property     | Supported |
+| ------------ | --------- |
+| `body`       | ✖         |
+| `bodyUsed`   | ✔         |
+| `headers`    | ✔         |
+| `ok`         | ✔         |
+| `redirected` | ✖         |
+| `status`     | ✔         |
+| `statusText` | ✔         |
+| `type`       | ✖         |
+| `url`        | ✔         |
 
 **Methods**
 
-| Method | Supported |
-|--------|-----------|
-| `arrayBuffer()` | ✔ |
-| `blob()` | ✔ |
-| `bytes()` | ✔ |
-| `clone()` | ✔ |
-| `formData()` | ✔ |
-| `json()` | ✔ |
-| `text()` | ✔ | 
+| Method          | Supported |
+| --------------- | --------- |
+| `arrayBuffer()` | ✔         |
+| `blob()`        | ✔         |
+| `bytes()`       | ✔         |
+| `clone()`       | ✔         |
+| `formData()`    | ✔         |
+| `json()`        | ✔         |
+| `text()`        | ✔         |
 
 ### Headers
 
-#### Example
+#### Example <!-- omit in toc -->
 
 ```javascript
 import { Headers, fetch } from "fetch-xhr-shim";
@@ -282,7 +283,7 @@ const myHeaders = new Headers();
 myHeaders.append("Content-Type", "text/plain");
 myHeaders.get("Content-Type"); // 'text/plain'
 
-fetch("https://www.test.com/headers", {
+fetch("https://example.com/headers", {
     headers: myHeaders,
 });
 ```
@@ -302,27 +303,27 @@ myHeaders = new Headers([["Content-Type", "text/plain"]]);
 myHeaders.get("Content-Type"); // 'text/plain'
 ```
 
-#### Compatibility
+#### Compatibility <!-- omit in toc -->
 
-| Method | Supported |
-|--------|-----------|
-| `append(name, value)` | ✔ |
-| `delete(name)` | ✔ |
-| `entries()` | ✔ |
-| `forEach(callbackFn)` | ✔ |
-| `forEach(callbackFn, thisArg)` | ✔ |
-| `get(name)` | ✔ |
-| `getSetCookie()` | ✖ |
-| `has(name)` | ✔ |
-| `keys()` | ✔ |
-| `set(name, value)` | ✔ |
-| `values()` | ✔ | 
+| Method                         | Supported |
+| ------------------------------ | --------- |
+| `append(name, value)`          | ✔         |
+| `delete(name)`                 | ✔         |
+| `entries()`                    | ✔         |
+| `forEach(callbackFn)`          | ✔         |
+| `forEach(callbackFn, thisArg)` | ✔         |
+| `get(name)`                    | ✔         |
+| `getSetCookie()`               | ✖         |
+| `has(name)`                    | ✔         |
+| `keys()`                       | ✔         |
+| `set(name, value)`             | ✔         |
+| `values()`                     | ✔         |
 
 ### Blob
 
-#### Example
+#### Example <!-- omit in toc -->
 
-#### Create a blob
+##### Create a blob <!-- omit in toc -->
 
 ```javascript
 import { Blob, fetch } from "fetch-xhr-shim";
@@ -336,13 +337,13 @@ const another_blob = new Blob(["Hello, World!"], {
     type: "text/plain"
 });
 
-fetch("https://www.test.com/blob", {
+fetch("https://example.com/blob", {
     method: "POST",
     body: another_blob,
 });
 ```
 
-#### Extract data from a blob
+##### Extract data from a blob <!-- omit in toc -->
 
 ```javascript
 import { Blob, FileReader, fetch } from "fetch-xhr-shim";
@@ -357,7 +358,7 @@ reader.addEventListener("loadend", () => {
 });
 reader.readAsArrayBuffer(blob);
 
-fetch("https://www.test.com/blob", {
+fetch("https://example.com/blob", {
     method: "POST",
     body: blob,
 })
@@ -379,31 +380,31 @@ import { setReadableStreamClass } from "fetch-xhr-shim";
 setReadableStreamClass(another_ReadableStream_Class);
 ```
 
-#### Compatibility
+#### Compatibility <!-- omit in toc -->
 
 **Properties**
 
 | Property | Supported |
-|----------|-----------|
-| `size` | ✔ |
-| `type` | ✔ |
+| -------- | --------- |
+| `size`   | ✔         |
+| `type`   | ✔         |
 
 **Methods**
 
-| Method | Supported |
-|--------|-----------|
-| `arrayBuffer()` | ✔ |
-| `bytes()` | ✔ |
-| `slice()` | ✔ |
-| `slice(start)` | ✔ |
-| `slice(start, end)` | ✔ |
-| `slice(start, end, contentType)` | ✔ |
-| `stream()` | ✔ |
-| `text()` | ✔ | 
+| Method                           | Supported |
+| -------------------------------- | --------- |
+| `arrayBuffer()`                  | ✔         |
+| `bytes()`                        | ✔         |
+| `slice()`                        | ✔         |
+| `slice(start)`                   | ✔         |
+| `slice(start, end)`              | ✔         |
+| `slice(start, end, contentType)` | ✔         |
+| `stream()`                       | ✔         |
+| `text()`                         | ✔         |
 
 ### File
 
-#### Example
+#### Example <!-- omit in toc -->
 
 ```javascript
 import { File } from "fetch-xhr-shim";
@@ -413,17 +414,17 @@ const file = new File(["foo"], "foo.txt", {
 });
 ```
 
-#### Compatibility
+#### Compatibility <!-- omit in toc -->
 
-| Property | Supported |
-|----------|-----------|
-| `lastModified` | ✔ |
-| `name` | ✔ |
-| `webkitRelativePath` | ✖ | 
+| Property             | Supported |
+| -------------------- | --------- |
+| `lastModified`       | ✔         |
+| `name`               | ✔         |
+| `webkitRelativePath` | ✖         |
 
 ### FileReader
 
-#### Example
+#### Example <!-- omit in toc -->
 
 ```javascript
 import { File, FileReader } from "fetch-xhr-shim";
@@ -440,29 +441,29 @@ reader.onload = () => {
 reader.readAsText(file);
 ```
 
-#### Compatibility
+#### Compatibility <!-- omit in toc -->
 
 **Properties**
 
-| Property | Supported |
-|----------|-----------|
-| `error` | ✔ |
-| `readyState` | ✔ |
-| `result` | ✔ |
+| Property     | Supported |
+| ------------ | --------- |
+| `error`      | ✔         |
+| `readyState` | ✔         |
+| `result`     | ✔         |
 
 **Methods**
 
-| Method | Supported | Notes |
-|--------|-----------|-------|
-| `abort()` | ✔ | simulated |
-| `readAsArrayBuffer()` | ✔ | |
-| `readAsBinaryString()` | ✔ | |
-| `readAsDataURL()` | ✔ | |
-| `readAsText()` | ✔ | UTF-8 only | 
+| Method                 | Supported | Notes      |
+| ---------------------- | --------- | ---------- |
+| `abort()`              | ✔         | simulated  |
+| `readAsArrayBuffer()`  | ✔         |            |
+| `readAsBinaryString()` | ✔         |            |
+| `readAsDataURL()`      | ✔         |            |
+| `readAsText()`         | ✔         | UTF-8 only |
 
 ### URLSearchParams
 
-#### Example
+#### Example <!-- omit in toc -->
 
 ```javascript
 import { URLSearchParams, fetch } from "fetch-xhr-shim";
@@ -488,16 +489,16 @@ searchParams.delete("topic");
 console.log(searchParams.toString()); // "q=URLUtils.searchParams"
 
 // GET
-fetch("https://www.test.com/get" + `?${searchParams.toString()}`);
+fetch("https://example.com/get" + `?${searchParams.toString()}`);
 
 // POST
-fetch("https://www.test.com/post", {
+fetch("https://example.com/post", {
     method: "POST",
     body: searchParams,
 });
 ```
 
-#### From an object
+##### From an object <!-- omit in toc -->
 
 Search params can also be initialized from a plain object.
 
@@ -512,37 +513,37 @@ console.log(searchParams.has("foo")); // true
 console.log(searchParams.get("foo")); // "bar"
 ```
 
-#### Compatibility
+#### Compatibility <!-- omit in toc -->
 
 **Properties**
 
 | Property | Supported |
-|----------|-----------|
-| `size` | ✔ |
+| -------- | --------- |
+| `size`   | ✔         |
 
 **Methods**
 
-| Method | Supported |
-|--------|-----------|
-| `append(name, value)` | ✔ |
-| `delete(name)` | ✔ |
-| `delete(name, value)` | ✔ |
-| `entries()` | ✔ |
-| `forEach(callback)` | ✔ |
-| `forEach(callback, thisArg)` | ✔ |
-| `get(name)` | ✔ |
-| `getAll(name)` | ✔ |
-| `has(name)` | ✔ |
-| `has(name, value)` | ✔ |
-| `keys()` | ✔ |
-| `set(name, value)` | ✔ |
-| `sort()` | ✔ |
-| `toString()` | ✔ |
-| `values()` | ✔ | 
+| Method                       | Supported |
+| ---------------------------- | --------- |
+| `append(name, value)`        | ✔         |
+| `delete(name)`               | ✔         |
+| `delete(name, value)`        | ✔         |
+| `entries()`                  | ✔         |
+| `forEach(callback)`          | ✔         |
+| `forEach(callback, thisArg)` | ✔         |
+| `get(name)`                  | ✔         |
+| `getAll(name)`               | ✔         |
+| `has(name)`                  | ✔         |
+| `has(name, value)`           | ✔         |
+| `keys()`                     | ✔         |
+| `set(name, value)`           | ✔         |
+| `sort()`                     | ✔         |
+| `toString()`                 | ✔         |
+| `values()`                   | ✔         |
 
 ### FormData
 
-#### Example
+#### Example <!-- omit in toc -->
 
 ```javascript
 import { FormData, fetch } from "fetch-xhr-shim";
@@ -555,48 +556,48 @@ const file = new File(["Hello, World!"], "file.txt", {
 });
 formData.append("file", file);
 
-fetch("https://www.test.com/formdata", {
+fetch("https://example.com/formdata", {
     method: "POST",
     body: formData,
 });
 ```
 
-#### Compatibility
+#### Compatibility <!-- omit in toc -->
 
 **Constructors**
 
-| Constructor | Supported |
-|-------------|-----------|
-| `new FormData()` | ✔ |
-| `new FormData(form)` | ✔ |
-| `new FormData(form, submitter)` | ✖ |
+| Constructor                     | Supported |
+| ------------------------------- | --------- |
+| `new FormData()`                | ✔         |
+| `new FormData(form)`            | ✔         |
+| `new FormData(form, submitter)` | ✖         |
 
 **Methods**
 
-| Method | Supported |
-|--------|-----------|
-| `append(name, value)` | ✔ |
-| `append(name, value, filename)` | ✔ |
-| `delete(name)` | ✔ |
-| `entries()` | ✔ |
-| `get(name)` | ✔ |
-| `getAll(name)` | ✔ |
-| `has(name)` | ✔ |
-| `keys()` | ✔ |
-| `set(name, value)` | ✔ |
-| `set(name, value, filename)` | ✔ |
-| `values()` | ✔ | 
+| Method                          | Supported |
+| ------------------------------- | --------- |
+| `append(name, value)`           | ✔         |
+| `append(name, value, filename)` | ✔         |
+| `delete(name)`                  | ✔         |
+| `entries()`                     | ✔         |
+| `get(name)`                     | ✔         |
+| `getAll(name)`                  | ✔         |
+| `has(name)`                     | ✔         |
+| `keys()`                        | ✔         |
+| `set(name, value)`              | ✔         |
+| `set(name, value, filename)`    | ✔         |
+| `values()`                      | ✔         |
 
 ### AbortController
 
-#### Example
+#### Example <!-- omit in toc -->
 
 ```javascript
 import { AbortController, fetch } from "fetch-xhr-shim";
 
 const controller = new AbortController();
 
-fetch("https://www.test.com/abort", {
+fetch("https://example.com/abort", {
     signal: controller.signal,
 });
 ```
@@ -618,27 +619,27 @@ async function get() {
 }
 ```
 
-#### Compatibility
+#### Compatibility <!-- omit in toc -->
 
 **AbortController**
 
-| Member | Supported |
-|--------|-----------|
-| `signal` (property) | ✔ |
-| `abort()` | ✔ |
-| `abort(reason)` | ✔ |
+| Member              | Supported |
+| ------------------- | --------- |
+| `signal` (property) | ✔         |
+| `abort()`           | ✔         |
+| `abort(reason)`     | ✔         |
 
 **AbortSignal**
 
-| Member | Supported |
-|--------|-----------|
-| `aborted` (property) | ✔ |
-| `reason` (property) | ✔ |
-| `throwIfAborted()` | ✔ | 
+| Member               | Supported |
+| -------------------- | --------- |
+| `aborted` (property) | ✔         |
+| `reason` (property)  | ✔         |
+| `throwIfAborted()`   | ✔         |
 
 ### EventTarget
 
-#### Example
+#### Example <!-- omit in toc -->
 
 ```javascript
 import { EventTarget, Event, CustomEvent } from "fetch-xhr-shim";
@@ -664,21 +665,21 @@ const catFound = new CustomEvent("animalfound", {
 target.dispatchEvent(catFound);
 ```
 
-#### Compatibility
+#### Compatibility <!-- omit in toc -->
 
-| Method | Supported |
-|--------|-----------|
-| `addEventListener(type, listener)` | ✔ |
-| `addEventListener(type, listener, options)` | ✔ |
-| `addEventListener(type, listener, useCapture)` | ✔ |
-| `dispatchEvent(event)` | ✔ |
-| `removeEventListener(type, listener)` | ✔ |
-| `removeEventListener(type, listener, options)` | ✔ |
-| `removeEventListener(type, listener, useCapture)` | ✔ | 
+| Method                                            | Supported |
+| ------------------------------------------------- | --------- |
+| `addEventListener(type, listener)`                | ✔         |
+| `addEventListener(type, listener, options)`       | ✔         |
+| `addEventListener(type, listener, useCapture)`    | ✔         |
+| `dispatchEvent(event)`                            | ✔         |
+| `removeEventListener(type, listener)`             | ✔         |
+| `removeEventListener(type, listener, options)`    | ✔         |
+| `removeEventListener(type, listener, useCapture)` | ✔         |
 
 ### TextEncoder
 
-#### Example
+#### Example <!-- omit in toc -->
 
 ```javascript
 import { TextEncoder } from "fetch-xhr-shim";
@@ -689,17 +690,17 @@ const encoded = encoder.encode("€");
 console.log(encoded); // Uint8Array(3) [226, 130, 172]
 ```
 
-#### Compatibility
+#### Compatibility <!-- omit in toc -->
 
-| Member | Supported | Notes |
-|--------|-----------|-------|
-| `encoding` (property) | ✔ | `"utf-8"` |
-| `encode(string)` | ✔ | |
-| `encodeInto(string, uint8Array)` | ✔ | | 
+| Member                           | Supported | Notes     |
+| -------------------------------- | --------- | --------- |
+| `encoding` (property)            | ✔         | `"utf-8"` |
+| `encode(string)`                 | ✔         |           |
+| `encodeInto(string, uint8Array)` | ✔         |           |
 
 ### TextDecoder
 
-#### Example
+#### Example <!-- omit in toc -->
 
 ```javascript
 import { TextDecoder } from "fetch-xhr-shim";
@@ -710,31 +711,34 @@ const encodedText = new Uint8Array([240, 160, 174, 183]);
 console.log(utf8decoder.decode(encodedText)); // 𠮷
 ```
 
-#### Compatibility
+#### Compatibility <!-- omit in toc -->
 
-| Member | Supported | Notes |
-|--------|-----------|-------|
-| `encoding` (property) | ✔ | UTF-8 only |
-| `fatal` (property) | ✔ | |
-| `ignoreBOM` (property) | ✔ | |
-| `decode()` | ✔ | |
-| `decode(buffer)` | ✔ | |
-| `decode(buffer, options)` | ✔ | | 
+| Member                    | Supported | Notes      |
+| ------------------------- | --------- | ---------- |
+| `encoding` (property)     | ✔         | UTF-8 only |
+| `fatal` (property)        | ✔         |            |
+| `ignoreBOM` (property)    | ✔         |            |
+| `decode()`                | ✔         |            |
+| `decode(buffer)`          | ✔         |            |
+| `decode(buffer, options)` | ✔         |            |
 
 ## Fix Functions
 
-### fixFetch
+### fixFetch <!-- omit in toc -->
 
-Wraps a native `fetch` so it can accept polyfill `Blob`, `FormData`, `Request`, and `Headers` objects as input. Useful when you have a native `fetch` but want to pass polyfill types to it.
+Wraps a native `fetch` so it can accept polyfill `Blob`, `FormData`, `Request`, and `Headers` objects as input. 
+Useful when you have a native `fetch` but want to pass polyfill types to it.
 
 ```javascript
 import { fixFetch } from "fetch-xhr-shim";
 
 const _fetch = fixFetch();   // You can also pass a specific fetch function to fix.
-_fetch("https://www.npmjs.com");
+
+_fetch("https://example.com/flowers.jpg")
+    .then((response) => response.blob());
 ```
 
-### fixXMLHttpRequest
+### fixXMLHttpRequest <!-- omit in toc -->
 
 Patches `XMLHttpRequest.prototype` so the native XHR can send polyfill `Blob` and `FormData` bodies.
 
@@ -744,7 +748,7 @@ import { fixXMLHttpRequest } from "fetch-xhr-shim";
 fixXMLHttpRequest();   // You can also pass a specific XHR class to fix.
 ```
 
-### fixWebSocket
+### fixWebSocket <!-- omit in toc -->
 
 Patches `WebSocket.prototype` so the native WebSocket can send polyfill `Blob` data.
 
@@ -818,8 +822,24 @@ setXMLHttpRequestClass(XMLHttpRequest);
 
 ## License
 
-MIT
+MIT License
 
----
+Copyright (c) 2026
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
