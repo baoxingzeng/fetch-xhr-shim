@@ -44,11 +44,11 @@ export function isPolyfillType<T>(name: string, value: unknown, strict = false):
         && ((index: number) => strict ? index === 0 : index > -1)((value as TChainIsArray)[field].chain.indexOf(name));
 }
 
+const iteratorSupported = typeof Symbol === "function" && !!Symbol.iterator;
 export function isSequence(value: unknown): value is any[] {
     return Array.isArray(value) || (!!value
         && typeof value === "object"
-        && typeof Symbol === "function"
-        && Symbol.iterator
+        && iteratorSupported
         && Symbol.iterator in value
         && typeof (value as (object & Record<typeof Symbol.iterator, unknown>))[Symbol.iterator] === "function");
 }
