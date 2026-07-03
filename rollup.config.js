@@ -34,6 +34,7 @@ export default [
             }),
         ],
     },
+
     // CommonJS (singlefile, minimized)
     {
         input: "src/index.ts",
@@ -81,12 +82,46 @@ export default [
             }),
         ],
     },
+
     // ES6 (singlefile, minimized)
     {
         input: "src/index.ts",
         output: {
             file: "dist/fetch-xhr-shim.esm.min.js",
             format: "es",
+        },
+        plugins: [
+            typescript({
+                declarationDir: "dist/types",
+                ignoreDeprecations: "6.0",
+            }),
+            terser(),
+        ],
+    },
+
+    // IIFE (polyfill singlefile)
+    {
+        input: "src/polyfill.ts",
+        output: {
+            file: "dist/fetch-xhr-shim.polyfill.iife.js",
+            format: "iife",
+            // name: "PolyfillFetch",
+        },
+        plugins: [
+            typescript({
+                declarationDir: "dist/types",
+                ignoreDeprecations: "6.0",
+            }),
+        ],
+    },
+
+    // IIFE (polyfill singlefile, minimized)
+    {
+        input: "src/polyfill.ts",
+        output: {
+            file: "dist/fetch-xhr-shim.polyfill.iife.min.js",
+            format: "iife",
+            // name: "PolyfillFetch",
         },
         plugins: [
             typescript({
