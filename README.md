@@ -772,15 +772,10 @@ AutoImport({
 
         {
             "fetch-xhr-shim": [
-                "TextEncoder",
-                "TextDecoder",
-
-                "EventTarget",
-                "Event",
-                "CustomEvent",
-
-                "AbortController",
-                "AbortSignal",
+                "fetch",
+                "Headers",
+                "Request",
+                "Response",
 
                 "Blob",
                 "File",
@@ -789,10 +784,15 @@ AutoImport({
                 "URLSearchParams",
                 "FormData",
 
-                "fetch",
-                "Headers",
-                "Request",
-                "Response",
+                "AbortController",
+                "AbortSignal",
+
+                "EventTarget",
+                "Event",
+                "CustomEvent",
+
+                "TextEncoder",
+                "TextDecoder",
             ],
         },
 
