@@ -13,10 +13,10 @@ export class AbortSignalP extends EventTargetP implements AbortSignal {
         if (!isSequence(signals)) { throw new TypeError("Failed to execute 'any' on 'AbortSignal': The provided value cannot be converted to a sequence."); }
 
         let _signals = Array.isArray(signals) ? signals : Array.from<AbortSignal>(signals);
-        _signals.forEach(sig => { if (!isEventTarget(sig)) throw new TypeError("Failed to execute 'any' on 'AbortSignal': Failed to convert value to 'AbortSignal'."); });
+        _signals.forEach(function (sig) { if (!isEventTarget(sig)) throw new TypeError("Failed to execute 'any' on 'AbortSignal': Failed to convert value to 'AbortSignal'."); });
 
         let signal = createAbortSignal();
-        let abortedSignal = (() => { for (let i = 0; i < _signals.length; ++i) { let sig = _signals[i]!; if (sig.aborted) return sig; } })();
+        let abortedSignal = (function () { for (let i = 0; i < _signals.length; ++i) { let sig = _signals[i]!; if (sig.aborted) return sig; } })();
 
         if (abortedSignal) {
             AbortSignal_abort(signal, false, abortedSignal.reason);
@@ -45,7 +45,7 @@ export class AbortSignalP extends EventTargetP implements AbortSignal {
         }
 
         const signal = createAbortSignal();
-        const execTimeout = () => AbortSignal_abort(signal, true, new DOMException("signal timed out", "TimeoutError"));
+        const execTimeout = function () { AbortSignal_abort(signal, true, new DOMException("signal timed out", "TimeoutError")); }
 
         setTimeout(execTimeout, milliseconds);
         return signal;
@@ -93,7 +93,7 @@ class AbortSignalState {
 
 function getHandlers(t: AbortSignal) {
     return {
-        onabort: (ev: Event) => { executeFn(t, t.onabort, ev); },
+        onabort: function (ev: Event) { executeFn(t, t.onabort, ev); },
     };
 }
 

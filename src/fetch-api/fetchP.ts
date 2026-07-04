@@ -11,7 +11,7 @@ export function fetchP(input: RequestInfo | URL, init?: RequestInit): Promise<Re
     checkArgsLength(arguments.length, 1, "Window", "fetch");
     if (new.target === fetchP) { throw new TypeError("fetch is not a constructor"); }
 
-    return new Promise((resolve, reject) => {
+    return new Promise(function (resolve, reject) {
         const request = new RequestP(input, init);
         const signal = request.__Request__.signal;
 
@@ -19,13 +19,13 @@ export function fetchP(input: RequestInfo | URL, init?: RequestInit): Promise<Re
             return reject(signal.reason);
         }
 
-        let XMLHttpRequestClass = mp.XMLHttpRequest || (() => { throw new ReferenceError("XMLHttpRequest is not defined") })();
+        let XMLHttpRequestClass = mp.XMLHttpRequest || (function () { throw new ReferenceError("XMLHttpRequest is not defined") })();
         let xhr = new XMLHttpRequestClass();
         let aborted = false;
         let payload = request.__Body__.payload;
         let response: ResponseP;
 
-        xhr.onload = () => {
+        xhr.onload = function () {
             let options = {
                 headers: parseHeaders(xhr.getAllResponseHeaders() || ""),
                 status: xhr.status,
@@ -38,7 +38,7 @@ export function fetchP(input: RequestInfo | URL, init?: RequestInit): Promise<Re
                 options.status = 200;
             }
 
-            setTimeout(() => {
+            setTimeout(function () {
                 response = new ResponseP("response" in xhr ? xhr.response : (xhr as XMLHttpRequest).responseText, options);
                 response.__Response__.url = "responseURL" in xhr ? xhr.responseURL : (options.headers.get("X-Request-URL") || "");
 
@@ -48,12 +48,12 @@ export function fetchP(input: RequestInfo | URL, init?: RequestInit): Promise<Re
 
                 if (!aborted) resolve(response);
                 else reject(createAbortException());
-            });
+            }, 0);
         }
 
-        xhr.onabort = () => { setTimeout(() => { reject(createAbortException()); }); }
-        xhr.onerror = () => { setTimeout(() => { reject(new TypeError("Failed to fetch")); }); }
-        xhr.ontimeout = () => { setTimeout(() => { reject(new DOMException("The request timed out.", "TimeoutError")); }); }
+        xhr.onabort = function () { setTimeout(function () { reject(createAbortException()); }, 0); }
+        xhr.onerror = function () { setTimeout(function () { reject(new TypeError("Failed to fetch")); }, 0); }
+        xhr.ontimeout = function () { setTimeout(function () { reject(new DOMException("The request timed out.", "TimeoutError")); }, 0); }
         xhr.open(request.method, fixUrl(request.url), true);
 
         if (request.credentials === "include") {
@@ -70,24 +70,24 @@ export function fetchP(input: RequestInfo | URL, init?: RequestInit): Promise<Re
             let headers = init.headers as Record<string, string>;
             let names: string[] = [];
 
-            Object.getOwnPropertyNames(headers).forEach(name => {
+            Object.getOwnPropertyNames(headers).forEach(function (name) {
                 names.push(normalizeName(name));
                 xhr.setRequestHeader(name, normalizeValue(headers[name]!));
             });
 
-            request.headers.forEach((value, name) => {
+            request.headers.forEach(function (value, name) {
                 if (names.indexOf(name) === -1) {
                     xhr.setRequestHeader(name, value);
                 }
             });
         } else {
-            request.headers.forEach((value, name) => {
+            request.headers.forEach(function (value, name) {
                 xhr.setRequestHeader(name, value);
             });
         }
 
         if (signal) {
-            const abortFn = () => {
+            const abortFn = function () {
                 if (response && !response.bodyUsed) {
                     let _payload = response.__Body__.payload = new Payload();
                     _payload.promise = Promise.reject(createAbortException());
@@ -96,20 +96,20 @@ export function fetchP(input: RequestInfo | URL, init?: RequestInit): Promise<Re
                 aborted = true; xhr.abort(); removeFn();
             }
 
-            const removeFn = () => {
+            const removeFn = function () {
                 signal.removeEventListener("abort", abortFn);
             }
 
             signal.addEventListener("abort", abortFn);
-            xhr.onreadystatechange = () => { if (xhr.readyState === 4) removeFn(); }
+            xhr.onreadystatechange = function () { if (xhr.readyState === 4) removeFn(); }
         }
 
         if (!payload) xhr.send();
-        else payload.promise.then(body => {
+        else payload.promise.then(function (body) {
             if (!aborted) xhr.send(body !== "" ? body : undefined);
             else reject(createAbortException());
         })
-            .catch(e => {
+            .catch(function (e) {
                 console.error(e);
                 reject(new TypeError("Failed to fetch"));
             });
@@ -121,7 +121,7 @@ function createAbortException() {
 }
 
 const locationSupported = typeof location !== "undefined" && !!location;
-const fixUrl = (url: string) => { if (url === "" && locationSupported && location?.href) { return location.href } else { return url; } }
+const fixUrl = function (url: string) { if (url === "" && locationSupported && location?.href) { return location.href } else { return url; } }
 
 const fetchE = (typeof fetch !== "undefined" && fetch) as typeof fetch || fetchP;
 export { fetchE as fetch };

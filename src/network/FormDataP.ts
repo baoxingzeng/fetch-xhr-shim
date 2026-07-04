@@ -135,15 +135,15 @@ export class FormDataP implements FormData {
     }
 
     entries(): FormDataIterator<[string, FormDataEntryValue]> {
-        return state(this).array.map(x => [x[0], x[1]] as [string, FormDataEntryValue]).values();
+        return state(this).array.map(function (x) { return [x[0], x[1]] as [string, FormDataEntryValue]; }).values();
     }
 
     keys(): FormDataIterator<string> {
-        return state(this).array.map(x => x[0]).values();
+        return state(this).array.map(function (x) { return x[0]; }).values();
     }
 
     values(): FormDataIterator<FormDataEntryValue> {
-        return state(this).array.map(x => x[1]).values();
+        return state(this).array.map(function (x) { return x[1]; }).values();
     }
 
     declare [Symbol.iterator]: () => FormDataIterator<[string, FormDataEntryValue]>;
@@ -205,7 +205,7 @@ export function FormData_toBlob(formData: FormData, externalBoundary?: string): 
     let chunks: BlobPart[] = [];
     let useNativeBlob = true;
 
-    formData.forEach((value, name) => {
+    formData.forEach(function (value, name) {
         if (typeof value === "string") {
             chunks.push(p + escape(normalizeLinefeeds(name)) + `"\r\n\r\n${normalizeLinefeeds(value)}\r\n`);
         } else {
@@ -242,7 +242,7 @@ export function extractBoundary(contentType: string | null) {
 }
 
 export function createFormDataFromBinaryText(text: string, boundary?: string): FormData {
-    const throwParseError = () => {
+    const throwParseError = function () {
         throw new TypeError("Could not parse content as FormData.");
     }
 
@@ -260,7 +260,7 @@ export function createFormDataFromBinaryText(text: string, boundary?: string): F
         throwParseError();
     }
 
-    let parts = text.split(`--${_boundary}`).filter(part => {
+    let parts = text.split(`--${_boundary}`).filter(function (part) {
         let trimmed = part.trim();
         return trimmed !== "" && trimmed !== "--";
     });
@@ -272,7 +272,7 @@ export function createFormDataFromBinaryText(text: string, boundary?: string): F
     let pairs: [string, FormDataEntryValue][] = [];
     let hasFile = false;
 
-    parts.forEach(part => {
+    parts.forEach(function (part) {
         let separatorIndex = part.indexOf("\r\n\r\n");
         if (separatorIndex === -1) { throwParseError(); }
 
@@ -295,7 +295,7 @@ export function createFormDataFromBinaryText(text: string, boundary?: string): F
         }
     });
 
-    let useNativeFormData = !hasFile || (() => {
+    let useNativeFormData = !hasFile || (function () {
         try {
             let fd = new FormDataE();
             fd.append("file", new File([], ""));
@@ -307,7 +307,7 @@ export function createFormDataFromBinaryText(text: string, boundary?: string): F
 
     let FormDataClass = useNativeFormData ? FormDataE : FormDataP;
     let formData = new FormDataClass();
-    pairs.forEach(x => { formData.append(x[0], x[1]); });
+    pairs.forEach(function (x) { formData.append(x[0], x[1]); });
     return formData;
 }
 

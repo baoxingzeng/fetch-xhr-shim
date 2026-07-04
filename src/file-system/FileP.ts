@@ -32,7 +32,7 @@ function createFileClass(BlobClass: typeof Blob): typeof FileP {
         /** @internal */ declare readonly __MPHTTPX__: { chain: string[]; };
     }
 
-    if (Object.is(BlobClass, BlobP)) {
+    if (BlobClass === BlobP) {
         Object.defineProperty(FileClass.prototype, "__MPHTTPX__", {
             configurable: true,
             get: function () { return { chain: ["File", "Blob"] }; },
@@ -55,7 +55,7 @@ function state(target: { __File__: FileState }) {
 const FilePolyfill = createFileClass(BlobP);
 const FileE = (function () { try { new File([], ""); return true; } catch (e) { return false; } })() as true
     ? File
-    : Object.is(Blob, BlobP)
+    : Blob === BlobP
         ? FilePolyfill
         : createFileClass(Blob);
 

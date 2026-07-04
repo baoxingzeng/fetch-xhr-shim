@@ -18,7 +18,7 @@ export class EventTargetP implements EventTarget {
         let executor = new Executor(type, callback);
         let capture = executor.options.capture = typeof options === "boolean" ? options : !!options?.capture;
 
-        if (!s.executors.some(x => x.equals(executor))) {
+        if (!s.executors.some(function (x) { return x.equals(executor); })) {
             s.executors.push(executor);
             if (options && typeof options === "object") {
                 executor.options.once = !!options.once;
@@ -31,8 +31,8 @@ export class EventTargetP implements EventTarget {
                 }
             }
             if (capture) {
-                let f = (v: Executor) => !!v.options.capture ? 0 : 1;
-                s.executors = s.executors.sort((a, b) => f(a) - f(b));
+                let f = function (v: Executor) { return !!v.options.capture ? 0 : 1; }
+                s.executors = s.executors.sort(function (a, b) { return f(a) - f(b); });
             }
         }
     }
@@ -60,8 +60,8 @@ export class EventTargetP implements EventTarget {
         let executor = new Executor(type, callback);
         executor.options.capture = typeof options === "boolean" ? options : !!options?.capture;
 
-        if (s.executors.some(x => x.equals(executor))) {
-            s.executors = s.executors.filter(x => !x.equals(executor));
+        if (s.executors.some(function (x) { return x.equals(executor); })) {
+            s.executors = s.executors.filter(function (x) { return !x.equals(executor); });
         }
     }
 
@@ -80,7 +80,7 @@ function state(target: EventTargetP) {
 }
 
 function isEvent(value: unknown): value is Event {
-    const predicate = (str: string) => { return "[object " === str.slice(0, 8) && str.slice(-6) === "Event]"; }
+    const predicate = function (str: string) { return "[object " === str.slice(0, 8) && str.slice(-6) === "Event]"; }
 
     return !!value
         && typeof value === "object"
@@ -90,8 +90,8 @@ function isEvent(value: unknown): value is Event {
 }
 
 function whenAbort(target: EventTargetP, executor: Executor, signal: AbortSignal) {
-    const onAbort = () => {
-        state(target).executors = state(target).executors.filter(x => !x.equals(executor));
+    const onAbort = function () {
+        state(target).executors = state(target).executors.filter(function (x) { return !x.equals(executor); });
         signal.removeEventListener("abort", onAbort);
     }
     signal.addEventListener("abort", onAbort);
@@ -109,9 +109,9 @@ class Executor {
     options: AddEventListenerOptions = {};
 
     equals(executor: Executor) {
-        return Object.is(this.type, executor.type)
-            && Object.is(this.callback, executor.callback)
-            && Object.is(this.options.capture, executor.options.capture);
+        return this.type === executor.type
+            && this.callback === executor.callback
+            && this.options.capture === executor.options.capture;
     }
 }
 
@@ -154,7 +154,7 @@ export function EventTarget_dispatchEvent(target: EventTarget, event: Event) {
     }
 
     if (onceIndexes.length > 0) {
-        s.executors = s.executors.reduce((acc: Executor[], cur, index) => {
+        s.executors = s.executors.reduce(function (acc: Executor[], cur, index) {
             if (onceIndexes.indexOf(index) === -1) acc.push(cur);
             return acc;
         }, []);

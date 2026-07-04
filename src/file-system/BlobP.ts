@@ -22,7 +22,7 @@ export class BlobP implements Blob {
             let chunk = _blobParts[i]!;
             if (isBlob(chunk)) {
                 size += chunk.size;
-                tasks.push(chunk.arrayBuffer().then(r => new Uint8Array(r)));
+                tasks.push(chunk.arrayBuffer().then(function (r) { return new Uint8Array(r); }));
             } else {
                 let bytes = (isArrayBuffer(chunk) || ArrayBuffer.isView(chunk))
                     ? BufferSource_toUint8Array(chunk)
@@ -32,7 +32,7 @@ export class BlobP implements Blob {
             }
         }
 
-        setState(this, "__Blob__", new BlobState(Promise.all(tasks).then(chunks => concat(chunks))));
+        setState(this, "__Blob__", new BlobState(Promise.all(tasks).then(function (chunks) { return concat(chunks); })));
         state(this).size = size;
         state(this).type = normalizeType(options?.type);
     }
@@ -43,24 +43,24 @@ export class BlobP implements Blob {
     get type(): string { return state(this).type; }
 
     arrayBuffer(): Promise<ArrayBuffer> {
-        return state(this).promise.then(r => clone(r.buffer).buffer);
+        return state(this).promise.then(function (r) { return clone(r.buffer).buffer; });
     }
 
     bytes(): Promise<Uint8Array<ArrayBuffer>> {
-        return state(this).promise.then(r => clone(r.buffer));
+        return state(this).promise.then(function (r) { return clone(r.buffer); });
     }
 
     slice(start?: number, end?: number, contentType?: string): Blob {
         let _start = start ?? 0, _end = end ?? this.size;
         let blob = Object.create(BlobP.prototype) as BlobP;
-        setState(blob, "__Blob__", new BlobState(state(this).promise.then(r => clone(r.slice(_start, _end)))));
+        setState(blob, "__Blob__", new BlobState(state(this).promise.then(function (r) { return clone(r.slice(_start, _end)); })));
         state(blob).size = calcSlicedSize(this.size, _start, _end);
         state(blob).type = normalizeType(contentType);
         return blob;
     }
 
     stream(): ReadableStream<Uint8Array<ArrayBuffer>> {
-        let ReadableStreamClass = mp.ReadableStream || (() => { throw new ReferenceError("ReadableStream is not defined") })();
+        let ReadableStreamClass = mp.ReadableStream || (function () { throw new ReferenceError("ReadableStream is not defined") })();
         let position = 0;
 
         try {
@@ -100,7 +100,7 @@ export class BlobP implements Blob {
     }
 
     text(): Promise<string> {
-        return state(this).promise.then(r => decode(r));
+        return state(this).promise.then(function (r) { return decode(r); });
     }
 
     /** @internal */ toString() { return "[object Blob]"; }
@@ -142,14 +142,14 @@ function clone(buf: BufferSource) {
 }
 
 function concat(chunks: Uint8Array<ArrayBuffer>[]) {
-    let totalByteLength = chunks.reduce((acc, cur) => acc + cur.byteLength, 0);
+    let totalByteLength = chunks.reduce(function (acc, cur) { return acc + cur.byteLength; }, 0);
     let result = new Uint8Array(totalByteLength);
-    chunks.reduce((offset, chunk) => { result.set(chunk, offset); return offset + chunk.byteLength; }, 0);
+    chunks.reduce(function (offset, chunk) { result.set(chunk, offset); return offset + chunk.byteLength; }, 0);
     return result;
 }
 
 function calcSlicedSize(size: number, start?: number, end?: number) {
-    const normalizeNumer = (n?: number) => {
+    const normalizeNumer = function (n?: number) {
         let num = Number(n); if (isNaN(num)) num = 0;
         if (num >= 0) {
             num = Math.min(num, size);

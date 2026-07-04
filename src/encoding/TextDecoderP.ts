@@ -55,7 +55,7 @@ function decodeText(input?: AllowSharedBufferSource, { stream = false } = {}, se
         ? new Uint8Array(input)
         : ArrayBuffer.isView(input)
             ? new Uint8Array(input.buffer, input.byteOffset, input.byteLength)
-            : (() => { throw new TypeError("Input could not be converted to any of: ArrayBufferView, ArrayBuffer."); })();
+            : (function () { throw new TypeError("Input could not be converted to any of: ArrayBufferView, ArrayBuffer."); })();
 
     if (settings.partial.length > 0) {
         let merged = new Uint8Array(settings.partial.length + bytes.length);

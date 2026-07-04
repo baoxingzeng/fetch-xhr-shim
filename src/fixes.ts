@@ -99,11 +99,11 @@ export function fixFetch(fetchFunc?: typeof fetch): typeof fetch {
         if (init && init.headers && isPolyfillType<Headers>("Headers", init.headers)) {
             if (typeof Headers !== "undefined" && Headers && !("__MPHTTPX__" in Headers.prototype)) {
                 let headers = new Headers();
-                init.headers.forEach((value, name) => { headers.append(name, value); });
+                init.headers.forEach(function (value, name) { headers.append(name, value); });
                 init.headers = headers;
             } else {
                 let headers: Record<string, string> = {};
-                init.headers.forEach((value, name) => { headers[name] = value; });
+                init.headers.forEach(function (value, name) { headers[name] = value; });
                 init.headers = headers;
             }
         }
@@ -128,8 +128,8 @@ export function fixFetch(fetchFunc?: typeof fetch): typeof fetch {
                 let processing = true;
 
                 if (input && typeof input === "object" && "signal" in input && isEventTarget(input.signal)) {
-                    let abortFn = () => { if (processing) { aborted = true; } removeFn!(); }
-                    removeFn = () => { (input.signal as EventTarget).removeEventListener("abort", abortFn); }
+                    let abortFn = function () { if (processing) { aborted = true; } removeFn!(); }
+                    removeFn = function () { (input.signal as EventTarget).removeEventListener("abort", abortFn); }
                     input.signal.addEventListener("abort", abortFn);
                 }
 
@@ -139,12 +139,12 @@ export function fixFetch(fetchFunc?: typeof fetch): typeof fetch {
                     else { reject(new DOMException("The user aborted a request.", "AbortError")); }
                     processing = false;
                 }).bind(this))
-                    .catch((e: Error) => {
+                    .catch(function (e: Error) {
                         reject(new TypeError("Failed to fetch"));
                         console.error(e);
                         processing = false;
                     })
-                    .then(() => { if (removeFn) { removeFn(); } }); // finally
+                    .then(function () { if (removeFn) { removeFn(); } }); // finally
             } else {
                 if (init && init.body && isPolyfillType<URLSearchParams>("URLSearchParams", init.body)) {
                     setContentType(init, "application/x-www-form-urlencoded;charset=UTF-8");
@@ -250,10 +250,10 @@ export function fixWebSocket(WSClass?: typeof WebSocket) {
     Klass.prototype.send = function (data: string | ArrayBufferLike | Blob | ArrayBufferView): void {
         if (fullOverride.value ? isBlob(data) : isPolyfillType<Blob>("Blob", data)) {
             let payload = new Payload(data);
-            payload.promise.then(r => {
+            payload.promise.then((function (this: WebSocket, r: string | ArrayBuffer) {
                 if (this.readyState !== 1 /* OPEN */) return;
                 _send.call(this, r);
-            });
+            }).bind(this));
         } else {
             _send.call(this, data);
         }

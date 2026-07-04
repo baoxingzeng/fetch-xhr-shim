@@ -12,7 +12,7 @@ export class DOMExceptionP extends Error {
     /** @internal */ get __MPHTTPX__() { return { chain: ["DOMException"] }; }
 }
 
-const DOMExceptionE = (() => { try { new DOMException(); return true; } catch (e) { return false; } })() ? DOMException : DOMExceptionP as never;
+const DOMExceptionE = (function () { try { new DOMException(); return true; } catch (e) { return false; } })() ? DOMException : DOMExceptionP as never;
 export { DOMExceptionE as DOMException };
 
 export function className(object: { __MPHTTPX__: { chain: string[] } }): string {
@@ -41,7 +41,7 @@ export function isPolyfillType<T>(name: string, value: unknown, strict = false):
         && typeof (value as THasField)[field] === "object"
         && "chain" in (value as TFieldIsObject)[field]
         && Array.isArray((value as THasChain)[field].chain)
-        && ((index: number) => strict ? index === 0 : index > -1)((value as TChainIsArray)[field].chain.indexOf(name));
+        && (function (index: number) { return strict ? index === 0 : index > -1; })((value as TChainIsArray)[field].chain.indexOf(name));
 }
 
 const iteratorSupported = typeof Symbol === "function" && !!Symbol.iterator;

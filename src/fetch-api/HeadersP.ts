@@ -6,7 +6,7 @@ export class HeadersP implements Headers {
 
         if (init !== undefined) {
             if (isHeaders(init)) {
-                init.forEach((value, name) => { Headers_append(this, name, value, ""); }, this);
+                init.forEach((function (this: HeadersP, value: string, name: string) { Headers_append(this, name, value, ""); }).bind(this), this);
             }
 
             else if (isSequence(init)) {
@@ -28,7 +28,7 @@ export class HeadersP implements Headers {
 
             else {
                 if (init && typeof init === "object") {
-                    Object.getOwnPropertyNames(init).forEach(name => { Headers_append(this, name, init[name]!); }, this);
+                    Object.getOwnPropertyNames(init).forEach((function (this: HeadersP, name: string) { Headers_append(this, name, init[name]!); }).bind(this), this);
                 } else {
                     throw new TypeError("Failed to construct 'Headers': The provided value is not of type '(record<ByteString, ByteString> or sequence<sequence<ByteString>>)'.");
                 }
@@ -83,20 +83,20 @@ export class HeadersP implements Headers {
 
     entries(): HeadersIterator<[string, string]> {
         let array: [string, string][] = [];
-        this.forEach((value, name) => { array.push([name, value]); });
+        this.forEach(function (value, name) { array.push([name, value]); });
         return array.values();
     }
 
     keys(): HeadersIterator<string> {
         let array: [string, string][] = [];
-        this.forEach((value, name) => { array.push([name, value]); });
-        return array.map(x => x[0]).values();
+        this.forEach(function (value, name) { array.push([name, value]); });
+        return array.map(function (x) { return x[0]; }).values();
     }
 
     values(): HeadersIterator<string> {
         let array: [string, string][] = [];
-        this.forEach((value, name) => { array.push([name, value]); });
-        return array.map(x => x[1]).values();
+        this.forEach(function (value, name) { array.push([name, value]); });
+        return array.map(function (x) { return x[1]; }).values();
     }
 
     declare [Symbol.iterator]: () => HeadersIterator<[string, string]>;
@@ -129,7 +129,7 @@ function Headers_append(headers: HeadersP, name: string, value: string, kind = "
 }
 
 function throwsFn(kind: string) {
-    return () => {
+    return function () {
         throw new TypeError(`Failed to ${(kind && kind !== "constructor") ? ("execute '" + kind + "' on") : "construct"} 'Headers': Invalid name`);
     };
 }
@@ -167,8 +167,8 @@ export function parseHeaders(rawHeaders: string): Headers {
 
     preProcessedHeaders
         .split("\r")
-        .map(header => header.indexOf("\n") === 0 ? header.substring(1, header.length) : header)
-        .forEach(line => {
+        .map(function (header) { return header.indexOf("\n") === 0 ? header.substring(1, header.length) : header; })
+        .forEach(function (line) {
             let parts = line.split(":");
             let name = parts.shift()!.trim();
             if (name) {
@@ -186,9 +186,9 @@ export function parseHeaders(rawHeaders: string): Headers {
 
 export function createHeaders(headers?: HeadersInit): Headers {
     if (isPolyfillType<Headers>("Headers", headers)) {
-        if (!Object.is(HeadersE, HeadersP)) {
+        if (HeadersE !== HeadersP) {
             let _headers = new HeadersE();
-            headers.forEach((v, k) => { _headers.append(k, v); });
+            headers.forEach(function (v, k) { _headers.append(k, v); });
             return _headers;
         }
     }

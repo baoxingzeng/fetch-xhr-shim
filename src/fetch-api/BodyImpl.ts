@@ -13,14 +13,14 @@ export class Payload {
         if (typeof body === "string") {
             this.promise = Promise.resolve(body);
             this.type = "text/plain;charset=UTF-8";
-            this.calcLength = () => encode(body).length;
+            this.calcLength = function () { return encode(body).length; }
         }
 
         else if (isURLSearchParams(body)) {
             let _body = body.toString();
             this.promise = Promise.resolve(_body);
             this.type = "application/x-www-form-urlencoded;charset=UTF-8";
-            this.calcLength = () => encode(_body).length;
+            this.calcLength = function () { return encode(_body).length; }
         }
 
         else if (isArrayBuffer(body)) {
@@ -56,7 +56,7 @@ export class Payload {
             let _body = "" + body;
             this.promise = Promise.resolve(_body);
             this.type = "text/plain;charset=UTF-8";
-            this.calcLength = () => encode(_body).length;
+            this.calcLength = function () { return encode(_body).length; }
         }
     }
 
@@ -74,8 +74,8 @@ export class Payload {
     private length?: number;
     private calcLength?: () => number;
 
-    text() { return this.promise.then(r => typeof r === "string" ? r : decode(r)); }
-    arrayBuffer() { return this.promise.then(r => isArrayBuffer(r) ? r : encode(r).buffer); }
+    text() { return this.promise.then(function (r) { return typeof r === "string" ? r : decode(r); }); }
+    arrayBuffer() { return this.promise.then(function (r) { return isArrayBuffer(r) ? r : encode(r).buffer; }); }
 }
 
 export class BodyImpl implements Body {
@@ -155,7 +155,7 @@ function read(body: BodyImpl, kind: "arrayBuffer" | "blob" | "bytes" | "formData
     let payload = state(body).payload || new Payload();
 
     if (kind === "json") {
-        return payload.text().then(r => JSON.parse(r));
+        return payload.text().then(function (r) { return JSON.parse(r); });
     }
 
     else if (kind === "text") {
@@ -167,15 +167,15 @@ function read(body: BodyImpl, kind: "arrayBuffer" | "blob" | "bytes" | "formData
     }
 
     else if (kind === "bytes") {
-        return payload.arrayBuffer().then(r => new Uint8Array(r));
+        return payload.arrayBuffer().then(function (r) { return new Uint8Array(r); });
     }
 
     else if (kind === "blob") {
-        return payload.promise.then(r => new Blob([r]));
+        return payload.promise.then(function (r) { return new Blob([r]); });
     }
 
     else if (kind === "formData") {
-        return payload.text().then(r => createFormDataFromBinaryText(r, extractBoundary(payload.type)));
+        return payload.text().then(function (r) { return createFormDataFromBinaryText(r, extractBoundary(payload.type)); });
     }
 
     else {

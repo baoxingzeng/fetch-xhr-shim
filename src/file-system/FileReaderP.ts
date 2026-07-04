@@ -41,33 +41,37 @@ export class FileReaderP extends EventTargetP implements FileReader {
 
     readAsArrayBuffer(blob: Blob): void {
         check(this, "readAsArrayBuffer", arguments.length, blob);
-        read(this, blob.size, () => blob.arrayBuffer());
+        read(this, blob.size, function () { return blob.arrayBuffer(); });
     }
 
     readAsBinaryString(blob: Blob): void {
         check(this, "readAsBinaryString", arguments.length, blob);
-        read(this, blob.size, () => blob.arrayBuffer().then(res => {
-            let str: string[] = [];
-            let buf = new Uint8Array(res);
-            for (let i = 0; i < buf.length; ++i) {
-                str.push(String.fromCharCode(buf[i]!));
-            }
-            return str.join("");
-        }));
+        read(this, blob.size, function () {
+            return blob.arrayBuffer().then(function (res) {
+                let str: string[] = [];
+                let buf = new Uint8Array(res);
+                for (let i = 0; i < buf.length; ++i) {
+                    str.push(String.fromCharCode(buf[i]!));
+                }
+                return str.join("");
+            });
+        });
     }
 
     readAsDataURL(blob: Blob): void {
         check(this, "readAsDataURL", arguments.length, blob);
-        read(this, blob.size, () => blob.arrayBuffer().then(res => {
-            return "data:" + (blob.type || "application/octet-stream") + ";base64," + Uint8Array_toBase64(new Uint8Array(res));
-        }));
+        read(this, blob.size, function () {
+            return blob.arrayBuffer().then(function (res) {
+                return "data:" + (blob.type || "application/octet-stream") + ";base64," + Uint8Array_toBase64(new Uint8Array(res));
+            });
+        });
     }
 
     readAsText(blob: Blob, encoding?: string): void {
         check(this, "readAsText", arguments.length, blob);
         if (typeof TextDecoder === "function") {
             let decoder = new TextDecoder(encoding);
-            read(this, blob.size, () => blob.arrayBuffer().then(r => decoder.decode(r)));
+            read(this, blob.size, function () { return blob.arrayBuffer().then(function (r) { return decoder.decode(r); }); });
         } else {
             if (encoding !== undefined) {
                 let _encoding = "" + encoding;
@@ -75,7 +79,7 @@ export class FileReaderP extends EventTargetP implements FileReader {
                     console.warn(`Ignoring the execution of 'readAsText' on 'FileReader': encoding ('${_encoding}') not implemented.`);
                 }
             }
-            read(this, blob.size, () => blob.text());
+            read(this, blob.size, function () { return blob.text(); });
         }
     }
 
@@ -125,12 +129,12 @@ class FileReaderState {
 
 function getHandlers(t: FileReader) {
     return {
-        onabort: (ev: ProgressEvent<FileReader>) => { executeFn(t, t.onabort, ev); },
-        onerror: (ev: ProgressEvent<FileReader>) => { executeFn(t, t.onerror, ev); },
-        onload: (ev: ProgressEvent<FileReader>) => { executeFn(t, t.onload, ev); },
-        onloadend: (ev: ProgressEvent<FileReader>) => { executeFn(t, t.onloadend, ev); },
-        onloadstart: (ev: ProgressEvent<FileReader>) => { executeFn(t, t.onloadstart, ev); },
-        onprogress: (ev: ProgressEvent<FileReader>) => { executeFn(t, t.onprogress, ev); },
+        onabort: function (ev: ProgressEvent<FileReader>) { executeFn(t, t.onabort, ev); },
+        onerror: function (ev: ProgressEvent<FileReader>) { executeFn(t, t.onerror, ev); },
+        onload: function (ev: ProgressEvent<FileReader>) { executeFn(t, t.onload, ev); },
+        onloadend: function (ev: ProgressEvent<FileReader>) { executeFn(t, t.onloadend, ev); },
+        onloadstart: function (ev: ProgressEvent<FileReader>) { executeFn(t, t.onloadstart, ev); },
+        onprogress: function (ev: ProgressEvent<FileReader>) { executeFn(t, t.onprogress, ev); },
     };
 }
 
@@ -153,7 +157,7 @@ function execLoadstart(reader: FileReaderP, size: number, launch: () => Promise<
     s.pos = FRCycle.LOADSTART;
     s.error = null;
     s.result = null;
-    const callback = () => { emitProgressEvent(reader, "loadstart", 0, size); return launch(); }
+    const callback = function () { emitProgressEvent(reader, "loadstart", 0, size); return launch(); }
     return execLoading(reader, size, callback);
 }
 
@@ -161,9 +165,9 @@ function execLoading(reader: FileReaderP, size: number, launch: () => Promise<st
     let s = state(reader);
     s.pos = FRCycle.LOADING;
     s.readyState = 1 /* LOADING */;
-    return Promise.resolve().then(() => {
+    return Promise.resolve().then(function () {
         if (s.pos !== FRCycle.LOADING) return;
-        return launch().then(r => execDone(reader, size, r)).catch(err => execError(reader, err));
+        return launch().then(function (r) { return execDone(reader, size, r); }).catch(function (err) { return execError(reader, err); });
     });
 }
 

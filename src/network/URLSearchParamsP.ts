@@ -6,7 +6,7 @@ export class URLSearchParamsP implements URLSearchParams {
 
         if (init !== undefined) {
             if (isURLSearchParams(init)) {
-                init.forEach((value, name) => { this.append(name, value); }, this);
+                init.forEach((function (this: URLSearchParamsP, value: string, name: string) { this.append(name, value); }).bind(this), this);
             }
 
             else if (init && typeof init === "object") {
@@ -26,7 +26,7 @@ export class URLSearchParamsP implements URLSearchParams {
                         }
                     }
                 } else {
-                    Object.getOwnPropertyNames(init).forEach(name => { this.append(name, init[name]!); }, this);
+                    Object.getOwnPropertyNames(init).forEach((function (this: URLSearchParamsP, name: string) { this.append(name, init[name]!); }).bind(this), this);
                 }
             }
 
@@ -148,7 +148,7 @@ export class URLSearchParamsP implements URLSearchParams {
     }
 
     sort(): void {
-        state(this).array.sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0);
+        state(this).array.sort(function (a, b) { return a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0; });
     }
 
     forEach(callbackfn: (value: string, key: string, parent: URLSearchParams) => void, thisArg?: any): void {
@@ -164,15 +164,15 @@ export class URLSearchParamsP implements URLSearchParams {
     }
 
     entries(): URLSearchParamsIterator<[string, string]> {
-        return state(this).array.map(x => [x[0], x[1]] as [string, string]).values();
+        return state(this).array.map(function (x) { return [x[0], x[1]] as [string, string]; }).values();
     }
 
     keys(): URLSearchParamsIterator<string> {
-        return state(this).array.map(x => x[0]).values();
+        return state(this).array.map(function (x) { return x[0]; }).values();
     }
 
     values(): URLSearchParamsIterator<string> {
-        return state(this).array.map(x => x[1]).values();
+        return state(this).array.map(function (x) { return x[1]; }).values();
     }
 
     declare [Symbol.iterator]: () => URLSearchParamsIterator<[string, string]>;
@@ -228,13 +228,13 @@ function encode(str: string) {
         "%00": "\x00",
     };
 
-    return encodeURIComponent(str).replace(/[!'\(\)~]|%20|%00/g, match => replace[match]!);
+    return encodeURIComponent(str).replace(/[!'\(\)~]|%20|%00/g, function (match) { return replace[match]!; });
 }
 
 function decode(str: string) {
     return str
         .replace(/[ +]/g, "%20")
-        .replace(/(%[a-f0-9]{2})+/ig, match => decodeURIComponent(match));
+        .replace(/(%[a-f0-9]{2})+/ig, function (match) { return decodeURIComponent(match); });
 }
 
 export function isURLSearchParams(value: unknown): value is URLSearchParams {
