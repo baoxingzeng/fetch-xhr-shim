@@ -193,6 +193,8 @@ function concatString(val: number[]) {
 // Mini Program
 function isOtherArrayBuffer(value: unknown): value is ArrayBuffer {
     return (isObjectType<ArrayBuffer>("ArrayBuffer", value) || String(value) === "[object ArrayBuffer]")
+        && !!value
+        && typeof value === "object"
         && "byteLength" in (value as object)
         && typeof (value as (object & Record<"byteLength", unknown>)).byteLength === "number";
 }

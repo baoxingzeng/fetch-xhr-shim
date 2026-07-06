@@ -125,6 +125,8 @@ function isRequest(value: unknown): value is Request {
 function isExternalRequest(value: unknown): value is Request {
     let expect = "[object Request]";
     return (Object.prototype.toString.call(value) === expect || String(value) === expect)
+        && !!value
+        && typeof value === "object"
         && "arrayBuffer" in (value as object)
         && typeof (value as (object & Record<"arrayBuffer", unknown>)).arrayBuffer === "function";
 }

@@ -170,6 +170,8 @@ function isExternalBlob(value: unknown, strict = false): value is Blob {
     if (!strict) expects.push("[object File]");
 
     return (expects.indexOf(Object.prototype.toString.call(value)) > -1 || expects.indexOf(String(value)) > -1)
+        && !!value
+        && typeof value === "object"
         && "size" in (value as object)
         && typeof (value as (object & Record<"size", unknown>)).size === "number"
         && "arrayBuffer" in (value as object)

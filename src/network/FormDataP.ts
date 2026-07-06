@@ -194,6 +194,8 @@ export function isFormData(value: unknown): value is FormData {
 function isExternalFormData(value: unknown): value is FormData {
     let expect = "[object FormData]";
     return (Object.prototype.toString.call(value) === expect || String(value) === expect)
+        && !!value
+        && typeof value === "object"
         && "forEach" in (value as object)
         && typeof (value as (object & Record<"forEach", unknown>)).forEach === "function";
 }

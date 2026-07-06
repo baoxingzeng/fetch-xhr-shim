@@ -145,6 +145,8 @@ export function isHeaders(value: unknown): value is Headers {
 function isExternalHeaders(value: unknown): value is Headers {
     let expect = "[object Headers]";
     return (Object.prototype.toString.call(value) === expect || String(value) === expect)
+        && !!value
+        && typeof value === "object"
         && "forEach" in (value as object)
         && typeof (value as (object & Record<"forEach", unknown>)).forEach === "function";
 }

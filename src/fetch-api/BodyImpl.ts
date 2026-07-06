@@ -199,6 +199,8 @@ function isGlobalReadableStream(value: unknown): value is ReadableStream {
 
 function isOtherReadableStream(value: unknown): value is ReadableStream {
     return (isObjectType<ReadableStream>("ReadableStream", value) || String(value) === "[object ReadableStream]")
+        && !!value
+        && typeof value === "object"
         && "getReader" in (value as object)
         && typeof (value as (object & Record<"getReader", unknown>)).getReader === "function";
 }
