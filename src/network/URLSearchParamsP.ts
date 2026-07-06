@@ -59,7 +59,7 @@ export class URLSearchParamsP implements URLSearchParams {
         state(this).array.push(["" + name, normalizeValue(value)]);
     }
 
-    delete(name: string, value?: string): void {
+    ["delete"](name: string, value?: string): void {
         checkArgsFn(arguments.length, 1, "delete");
         let _name = "" + name;
         let index = -1;

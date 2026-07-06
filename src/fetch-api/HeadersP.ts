@@ -43,7 +43,7 @@ export class HeadersP implements Headers {
         Headers_append(this, name, value, "append");
     }
 
-    delete(name: string): void {
+    ["delete"](name: string): void {
         checkArgsFn(arguments.length, 1, "delete");
         delete state(this).dict[normalizeName(name, throwsFn("delete"))];
     }

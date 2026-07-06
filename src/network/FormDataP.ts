@@ -50,7 +50,7 @@ export class FormDataP implements FormData {
         state(this).array.push(normalizeArgs(name, blobValue, filename));
     }
 
-    delete(name: string): void {
+    ["delete"](name: string): void {
         checkArgsFn(arguments.length, 1, "delete");
         let _name = "" + name;
         let index = -1;
