@@ -109,6 +109,7 @@ export default [
         },
         plugins: [
             typescript({
+                target: "es5",
                 declarationDir: "dist/types",
                 ignoreDeprecations: "6.0",
             }),
@@ -125,6 +126,7 @@ export default [
         },
         plugins: [
             typescript({
+                target: "es5",
                 declarationDir: "dist/types",
                 ignoreDeprecations: "6.0",
             }),
