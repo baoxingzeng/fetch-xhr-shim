@@ -1,3 +1,4 @@
+import { copyFileSync } from "node:fs";
 import { dts } from "rollup-plugin-dts";
 import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
@@ -113,6 +114,14 @@ export default [
                 declarationDir: "dist/types",
                 ignoreDeprecations: "6.0",
             }),
+            (function copyPolyfill() {
+                return {
+                    name: "copy-polyfill",
+                    closeBundle() {
+                        copyFileSync("dist/fetch-xhr-shim.polyfill.iife.js", "polyfill.js");
+                    },
+                };
+            })(),
         ],
     },
 

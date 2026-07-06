@@ -1,17 +1,18 @@
 {
   "name": "fetch-xhr-shim",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "author": "Xingzeng Bao",
   "homepage": "https://github.com/baoxingzeng/fetch-xhr-shim",
   "description": "A globalThis.fetch JavaScript polyfill.",
   "type": "module",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "main": "dist/fetch-xhr-shim.cjs.js",
+  "module": "dist/fetch-xhr-shim.esm.js",
   "types": "dist/index.d.ts",
   "files": [
     "README.md",
     "dist",
+    "polyfill.js",
     "!dist/types/**/*",
     "!dist/cjs/types/**/*",
     "!dist/esm/types/**/*"
