@@ -18,22 +18,8 @@ export class AbortSignalP extends EventTargetP implements AbortSignal {
         let signal = createAbortSignal();
         let abortedSignal = (function () { for (let i = 0; i < _signals.length; ++i) { let sig = _signals[i]!; if (sig.aborted) return sig; } })();
 
-        if (abortedSignal) {
-            AbortSignal_abort(signal, false, abortedSignal.reason);
-        } else {
-            function abortFn(this: AbortSignal) {
-                for (let i = 0; i < _signals.length; ++i) {
-                    let sig = _signals[i]!;
-                    sig.removeEventListener("abort", abortFn);
-                }
-                AbortSignal_abort(signal, true, this.reason);
-            }
-
-            for (let i = 0; i < _signals.length; ++i) {
-                let sig = _signals[i]!;
-                sig.addEventListener("abort", abortFn);
-            }
-        }
+        if (!abortedSignal) { followSignals(signal, _signals); }
+        else { AbortSignal_abort(signal, false, abortedSignal.reason); }
 
         return signal;
     }
@@ -99,6 +85,21 @@ function getHandlers(t: AbortSignal) {
 
 function state(target: AbortSignalP) {
     return target.__AbortSignal__;
+}
+
+function followSignals(signal: AbortSignal, signals: AbortSignal[]) {
+    function abortFn(this: AbortSignal) {
+        for (let i = 0; i < signals.length; ++i) {
+            let sig = signals[i]!;
+            sig.removeEventListener("abort", abortFn);
+        }
+        AbortSignal_abort(signal, true, this.reason);
+    }
+
+    for (let i = 0; i < signals.length; ++i) {
+        let sig = signals[i]!;
+        sig.addEventListener("abort", abortFn);
+    }
 }
 
 export function createAbortSignal(): AbortSignal {
