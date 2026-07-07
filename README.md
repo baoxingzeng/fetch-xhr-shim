@@ -354,7 +354,7 @@ const blob = new Blob([JSON.stringify({ foo: "bar" })], {
 
 const reader = new FileReader();
 reader.addEventListener("loadend", () => {
-  // reader.result contains the contents of blob as a typed array
+    // reader.result contains the contents of blob as a typed array
 });
 reader.readAsArrayBuffer(blob);
 
