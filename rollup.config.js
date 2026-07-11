@@ -16,7 +16,7 @@ export default [
             typescript({
                 outDir: "dist/cjs",
                 declarationDir: "dist/cjs/types",
-                ignoreDeprecations: "6.0",
+                moduleResolution: "bundler",
             }),
         ],
     },
@@ -31,7 +31,7 @@ export default [
         plugins: [
             typescript({
                 declarationDir: "dist/types",
-                ignoreDeprecations: "6.0",
+                moduleResolution: "bundler",
             }),
         ],
     },
@@ -46,7 +46,7 @@ export default [
         plugins: [
             typescript({
                 declarationDir: "dist/types",
-                ignoreDeprecations: "6.0",
+                moduleResolution: "bundler",
             }),
             terser(),
         ],
@@ -64,7 +64,7 @@ export default [
             typescript({
                 outDir: "dist/esm",
                 declarationDir: "dist/esm/types",
-                ignoreDeprecations: "6.0",
+                moduleResolution: "bundler",
             }),
         ],
     },
@@ -79,7 +79,7 @@ export default [
         plugins: [
             typescript({
                 declarationDir: "dist/types",
-                ignoreDeprecations: "6.0",
+                moduleResolution: "bundler",
             }),
         ],
     },
@@ -94,7 +94,7 @@ export default [
         plugins: [
             typescript({
                 declarationDir: "dist/types",
-                ignoreDeprecations: "6.0",
+                moduleResolution: "bundler",
             }),
             terser(),
         ],
@@ -110,9 +110,8 @@ export default [
         },
         plugins: [
             typescript({
-                target: "es5",
                 declarationDir: "dist/types",
-                ignoreDeprecations: "6.0",
+                moduleResolution: "bundler",
             }),
             (function copyPolyfill() {
                 return {
@@ -135,9 +134,8 @@ export default [
         },
         plugins: [
             typescript({
-                target: "es5",
                 declarationDir: "dist/types",
-                ignoreDeprecations: "6.0",
+                moduleResolution: "bundler",
             }),
             terser(),
         ],
