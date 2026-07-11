@@ -1,6 +1,6 @@
 export const _Symbol = {
-    iterator: ((typeof Symbol === "function") as true && (Symbol.iterator || "Symbol(Symbol.iterator)" as never)) as typeof Symbol.iterator,
-    toStringTag: ((typeof Symbol === "function") as true && (Symbol.toStringTag || "Symbol(Symbol.toStringTag)" as never)) as typeof Symbol.toStringTag,
+    iterator: ((typeof Symbol === "function" && Symbol.iterator) || "Symbol(Symbol.iterator)" as never) as typeof Symbol.iterator,
+    toStringTag: ((typeof Symbol === "function" && Symbol.toStringTag) || "Symbol(Symbol.toStringTag)" as never) as typeof Symbol.toStringTag,
 };
 
 export class DOMExceptionP extends Error {
