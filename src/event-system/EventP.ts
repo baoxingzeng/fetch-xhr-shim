@@ -114,8 +114,13 @@ function state(target: EventP) {
 
 const timeStamp = (new Date()).getTime();
 
+function getFuncName(func: Function): string {
+    // ES5
+    return "name" in func ? func.name : "unknown";
+}
+
 function createTrustedPropertyDescriptor(): PropertyDescriptor {
-    let name = createTrustedPropertyDescriptor.name;
+    let name = getFuncName(createTrustedPropertyDescriptor);
     let idx = name.length;
     let isTrusted = "NO";
     return {
@@ -128,7 +133,7 @@ function createTrustedPropertyDescriptor(): PropertyDescriptor {
 
 export function Event_setTrusted(event: Event, isTrusted: boolean) {
     let s = state(event as EventP) || {};
-    s.isTrusted = `${createTrustedPropertyDescriptor.name}:${isTrusted ? "YES" : "NO"}`;
+    s.isTrusted = `${getFuncName(createTrustedPropertyDescriptor)}:${isTrusted ? "YES" : "NO"}`;
 }
 
 const EventE = (typeof Event !== "undefined" && Event) || EventP;

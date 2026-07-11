@@ -143,7 +143,7 @@ export function createPhonyPayload(request: Request): Payload {
         } catch (e) {
             if (payload.type.slice(0, 19).toLowerCase() === "multipart/form-data") {
                 try {
-                    payload.promise = request.formData().then(function (r) { return (new Payload(r, payload.type)).promise; });
+                    payload.promise = request.formData().then(function (r: FormData) { return (new Payload(r, payload.type)).promise; });
                 } catch (e) {
                     // pass
                 }

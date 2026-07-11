@@ -6,7 +6,7 @@ export const encode = TextEncoder.prototype.encode.bind(new TextEncoder());
 export const decode = TextDecoder.prototype.decode.bind(new TextDecoder());
 
 const mp = { ReadableStream: (typeof ReadableStream !== "undefined" && ReadableStream) as typeof ReadableStream || undefined };
-export function setReadableStreamClass(RSClass: unknown) { mp.ReadableStream = RSClass as typeof globalThis.ReadableStream; }
+export function setReadableStreamClass(RSClass: unknown) { mp.ReadableStream = RSClass as typeof ReadableStream; }
 
 export class BlobP implements Blob {
     constructor(blobParts: BlobPart[] = [], options?: BlobPropertyBag) {
@@ -22,7 +22,7 @@ export class BlobP implements Blob {
             let chunk = _blobParts[i]!;
             if (isBlob(chunk)) {
                 size += chunk.size;
-                tasks.push(chunk.arrayBuffer().then(function (r) { return new Uint8Array(r); }));
+                tasks.push(chunk.arrayBuffer().then(function (r: ArrayBuffer) { return new Uint8Array(r); }));
             } else {
                 let bytes = (isArrayBuffer(chunk) || ArrayBuffer.isView(chunk))
                     ? BufferSource_toUint8Array(chunk)
@@ -32,7 +32,7 @@ export class BlobP implements Blob {
             }
         }
 
-        setState(this, "__Blob__", new BlobState(Promise.all(tasks).then(function (chunks) { return concat(chunks); })));
+        setState(this, "__Blob__", new BlobState(Promise.all(tasks).then(function (chunks: Uint8Array<ArrayBuffer>[]) { return concat(chunks); })));
         state(this).size = size;
         state(this).type = normalizeType(options?.type);
     }

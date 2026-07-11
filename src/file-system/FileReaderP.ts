@@ -47,7 +47,7 @@ export class FileReaderP extends EventTargetP implements FileReader {
     readAsBinaryString(blob: Blob): void {
         check(this, "readAsBinaryString", arguments.length, blob);
         read(this, blob.size, function () {
-            return blob.arrayBuffer().then(function (res) {
+            return blob.arrayBuffer().then(function (res: ArrayBuffer) {
                 let str: string[] = [];
                 let buf = new Uint8Array(res);
                 for (let i = 0; i < buf.length; ++i) {
@@ -61,7 +61,7 @@ export class FileReaderP extends EventTargetP implements FileReader {
     readAsDataURL(blob: Blob): void {
         check(this, "readAsDataURL", arguments.length, blob);
         read(this, blob.size, function () {
-            return blob.arrayBuffer().then(function (res) {
+            return blob.arrayBuffer().then(function (res: ArrayBuffer) {
                 return "data:" + (blob.type || "application/octet-stream") + ";base64," + Uint8Array_toBase64(new Uint8Array(res));
             });
         });
@@ -71,7 +71,7 @@ export class FileReaderP extends EventTargetP implements FileReader {
         check(this, "readAsText", arguments.length, blob);
         if (typeof TextDecoder === "function") {
             let decoder = new TextDecoder(encoding);
-            read(this, blob.size, function () { return blob.arrayBuffer().then(function (r) { return decoder.decode(r); }); });
+            read(this, blob.size, function () { return blob.arrayBuffer().then(function (r: ArrayBuffer) { return decoder.decode(r); }); });
         } else {
             if (encoding !== undefined) {
                 let _encoding = "" + encoding;

@@ -190,7 +190,7 @@ export function createHeaders(headers?: HeadersInit): Headers {
     if (isPolyfillType<Headers>("Headers", headers)) {
         if (HeadersE !== HeadersP) {
             let _headers = new HeadersE();
-            headers.forEach(function (v, k) { _headers.append(k, v); });
+            headers.forEach(function (v: string, k: string) { _headers.append(k, v); });
             return _headers;
         }
     }

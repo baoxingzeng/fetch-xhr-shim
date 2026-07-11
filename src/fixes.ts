@@ -99,11 +99,11 @@ export function fixFetch(fetchFunc?: typeof fetch): typeof fetch {
         if (init && init.headers && isPolyfillType<Headers>("Headers", init.headers)) {
             if (typeof Headers !== "undefined" && Headers && !("__MPHTTPX__" in Headers.prototype)) {
                 let headers = new Headers();
-                init.headers.forEach(function (value, name) { headers.append(name, value); });
+                init.headers.forEach(function (value: string, name: string) { headers.append(name, value); });
                 init.headers = headers;
             } else {
                 let headers: Record<string, string> = {};
-                init.headers.forEach(function (value, name) { headers[name] = value; });
+                init.headers.forEach(function (value: string, name: string) { headers[name] = value; });
                 init.headers = headers;
             }
         }
@@ -141,8 +141,8 @@ export function fixFetch(fetchFunc?: typeof fetch): typeof fetch {
                 }).bind(this))
                     .catch(function (e: Error) {
                         reject(new TypeError("Failed to fetch"));
-                        console.error(e);
                         processing = false;
+                        console.error(e);
                     })
                     .then(function () { if (removeFn) { removeFn(); } }); // finally
             } else {
@@ -199,8 +199,8 @@ export function fixXMLHttpRequest(XHRClass?: typeof XMLHttpRequest) {
             payload.promise.then((function (this: XMLHttpRequest, r: string | ArrayBuffer) {
                 if (!state(this).aborted) {
                     if (withCredentials !== this.withCredentials) {
-                        console.warn("Illegal to set the 'withCredentials' property on 'XMLHttpRequest': The value may only be set if the object's state is UNSENT or OPENED.");
                         this.withCredentials = withCredentials;
+                        console.warn("Illegal to set the 'withCredentials' property on 'XMLHttpRequest': The value may only be set if the object's state is UNSENT or OPENED.");
                     }
 
                     _send.call(this, r !== "" ? r : undefined);
@@ -209,9 +209,9 @@ export function fixXMLHttpRequest(XHRClass?: typeof XMLHttpRequest) {
                 state(this).processing = false;
             }).bind(this))
                 .catch((function (this: XMLHttpRequest, e: Error) {
-                    console.error(e);
                     state(this).aborted = false;
                     state(this).processing = false;
+                    console.error(e);
                 }).bind(this));
         } else {
             if (isPolyfillType<URLSearchParams>("URLSearchParams", body) && !state(this).hasContentType)

@@ -5,13 +5,13 @@ import { DOMException, checkArgsLength } from "../utils";
 import { isHeaders, normalizeName, normalizeValue, parseHeaders } from "./HeadersP";
 
 const mp = { XMLHttpRequest: (typeof XMLHttpRequest !== "undefined" && XMLHttpRequest) as typeof XMLHttpRequest || undefined };
-export function setXMLHttpRequestClass(XHRClass: unknown) { mp.XMLHttpRequest = XHRClass as typeof globalThis.XMLHttpRequest; }
+export function setXMLHttpRequestClass(XHRClass: unknown) { mp.XMLHttpRequest = XHRClass as typeof XMLHttpRequest; }
 
 export function fetchP(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
     checkArgsLength(arguments.length, 1, "Window", "fetch");
     if (new.target === fetchP) { throw new TypeError("fetch is not a constructor"); }
 
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve: ((value: Response) => void), reject: ((reason?: any) => void)) {
         const request = new RequestP(input, init);
         const signal = request.__Request__.signal;
 
@@ -75,13 +75,13 @@ export function fetchP(input: RequestInfo | URL, init?: RequestInit): Promise<Re
                 xhr.setRequestHeader(name, normalizeValue(headers[name]!));
             });
 
-            request.headers.forEach(function (value, name) {
+            request.headers.forEach(function (value: string, name: string) {
                 if (names.indexOf(name) === -1) {
                     xhr.setRequestHeader(name, value);
                 }
             });
         } else {
-            request.headers.forEach(function (value, name) {
+            request.headers.forEach(function (value: string, name: string) {
                 xhr.setRequestHeader(name, value);
             });
         }
@@ -110,8 +110,8 @@ export function fetchP(input: RequestInfo | URL, init?: RequestInit): Promise<Re
             else reject(createAbortException());
         })
             .catch(function (e) {
-                console.error(e);
                 reject(new TypeError("Failed to fetch"));
+                console.error(e);
             });
     });
 }

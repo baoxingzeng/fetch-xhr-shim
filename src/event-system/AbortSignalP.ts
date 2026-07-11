@@ -13,7 +13,7 @@ export class AbortSignalP extends EventTargetP implements AbortSignal {
         if (!isSequence(signals)) { throw new TypeError("Failed to execute 'any' on 'AbortSignal': The provided value cannot be converted to a sequence."); }
 
         let _signals = Array.isArray(signals) ? signals : Array.from<AbortSignal>(signals);
-        _signals.forEach(function (sig) { if (!isEventTarget(sig)) throw new TypeError("Failed to execute 'any' on 'AbortSignal': Failed to convert value to 'AbortSignal'."); });
+        _signals.forEach(function (sig: AbortSignal) { if (!isEventTarget(sig)) throw new TypeError("Failed to execute 'any' on 'AbortSignal': Failed to convert value to 'AbortSignal'."); });
 
         let signal = createAbortSignal();
         let abortedSignal = (function () { for (let i = 0; i < _signals.length; ++i) { let sig = _signals[i]!; if (sig.aborted) return sig; } })();

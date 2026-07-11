@@ -207,7 +207,7 @@ export function FormData_toBlob(formData: FormData, externalBoundary?: string): 
     let chunks: BlobPart[] = [];
     let useNativeBlob = true;
 
-    formData.forEach(function (value, name) {
+    formData.forEach(function (value: FormDataEntryValue, name: string) {
         if (typeof value === "string") {
             chunks.push(p + escape(normalizeLinefeeds(name)) + `"\r\n\r\n${normalizeLinefeeds(value)}\r\n`);
         } else {
