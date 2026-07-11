@@ -39,11 +39,11 @@ export class AbortSignalP extends EventTargetP implements AbortSignal {
 
     /** @internal */
     constructor() {
-        if (new.target === AbortSignalP) {
+        super();
+        if (this.constructor === AbortSignalP) {
             throw new TypeError("Failed to construct 'AbortSignal': Illegal constructor");
         }
 
-        super();
         setState(this, "__AbortSignal__", new AbortSignalState(this));
     }
 

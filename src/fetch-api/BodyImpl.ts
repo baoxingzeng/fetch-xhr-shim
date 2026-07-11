@@ -81,7 +81,7 @@ export class Payload {
 export class BodyImpl implements Body {
     /** @internal */
     constructor() {
-        if (new.target === BodyImpl) {
+        if (this.constructor === BodyImpl) {
             throw new TypeError("Failed to construct 'Body': Illegal constructor");
         }
 

@@ -8,8 +8,8 @@ const mp = { XMLHttpRequest: (typeof XMLHttpRequest !== "undefined" && XMLHttpRe
 export function setXMLHttpRequestClass(XHRClass: unknown) { mp.XMLHttpRequest = XHRClass as typeof XMLHttpRequest; }
 
 export function fetchP(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
-    checkArgsLength(arguments.length, 1, "Window", "fetch");
-    if (new.target === fetchP) { throw new TypeError("fetch is not a constructor"); }
+    checkArgsLength(arguments.length, 1, "Window", "fetch");    // @ts-expect-error
+    if (this instanceof fetchP) { throw new TypeError("fetch is not a constructor"); }
 
     return new Promise(function (resolve: ((value: Response) => void), reject: ((reason?: any) => void)) {
         const request = new RequestP(input, init);
