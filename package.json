@@ -1,6 +1,6 @@
 {
   "name": "fetch-xhr-shim",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "license": "MIT",
   "author": "Xingzeng Bao",
   "homepage": "https://github.com/baoxingzeng/fetch-xhr-shim",
@@ -47,6 +47,9 @@
     "polyfill"
   ],
   "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@babel/preset-env": "^7.29.7",
+    "@rollup/plugin-babel": "^7.1.0",
     "@rollup/plugin-terser": "^1.0.0",
     "@rollup/plugin-typescript": "^12.3.0",
     "cors": "^2.8.6",

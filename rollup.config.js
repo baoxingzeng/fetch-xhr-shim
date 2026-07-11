@@ -1,5 +1,6 @@
 import { copyFileSync } from "node:fs";
 import { dts } from "rollup-plugin-dts";
+import { babel } from "@rollup/plugin-babel";
 import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
 
@@ -33,6 +34,10 @@ export default [
                 declarationDir: "dist/types",
                 moduleResolution: "bundler",
             }),
+            babel({
+                babelHelpers: "bundled",
+                extensions: [".js", ".jsx", ".es6", ".es", ".mjs", ".ts", ".tsx"],
+            }),
         ],
     },
 
@@ -47,6 +52,10 @@ export default [
             typescript({
                 declarationDir: "dist/types",
                 moduleResolution: "bundler",
+            }),
+            babel({
+                babelHelpers: "bundled",
+                extensions: [".js", ".jsx", ".es6", ".es", ".mjs", ".ts", ".tsx"],
             }),
             terser(),
         ],
@@ -81,6 +90,10 @@ export default [
                 declarationDir: "dist/types",
                 moduleResolution: "bundler",
             }),
+            babel({
+                babelHelpers: "bundled",
+                extensions: [".js", ".jsx", ".es6", ".es", ".mjs", ".ts", ".tsx"],
+            }),
         ],
     },
 
@@ -95,6 +108,10 @@ export default [
             typescript({
                 declarationDir: "dist/types",
                 moduleResolution: "bundler",
+            }),
+            babel({
+                babelHelpers: "bundled",
+                extensions: [".js", ".jsx", ".es6", ".es", ".mjs", ".ts", ".tsx"],
             }),
             terser(),
         ],
@@ -112,6 +129,10 @@ export default [
             typescript({
                 declarationDir: "dist/types",
                 moduleResolution: "bundler",
+            }),
+            babel({
+                babelHelpers: "bundled",
+                extensions: [".js", ".jsx", ".es6", ".es", ".mjs", ".ts", ".tsx"],
             }),
             (function copyPolyfill() {
                 return {
@@ -136,6 +157,10 @@ export default [
             typescript({
                 declarationDir: "dist/types",
                 moduleResolution: "bundler",
+            }),
+            babel({
+                babelHelpers: "bundled",
+                extensions: [".js", ".jsx", ".es6", ".es", ".mjs", ".ts", ".tsx"],
             }),
             terser(),
         ],
