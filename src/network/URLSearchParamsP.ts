@@ -1,4 +1,4 @@
-import { _Symbol, setState, isObjectType, isPolyfillType, isSequence, checkArgsLength } from "../utils";
+import { _Symbol, setState, isObjectType, isPolyfillType, isSequence, makeIterator, checkArgsLength } from "../utils";
 
 export class URLSearchParamsP implements URLSearchParams {
     constructor(init?: string[][] | Record<string, string> | string | URLSearchParams) {
@@ -164,15 +164,15 @@ export class URLSearchParamsP implements URLSearchParams {
     }
 
     entries(): URLSearchParamsIterator<[string, string]> {
-        return state(this).array.map(function (x) { return [x[0], x[1]] as [string, string]; }).values();
+        return makeIterator(state(this).array.map(function (x) { return [x[0], x[1]] as [string, string]; }));
     }
 
     keys(): URLSearchParamsIterator<string> {
-        return state(this).array.map(function (x) { return x[0]; }).values();
+        return makeIterator(state(this).array.map(function (x) { return x[0]; }));
     }
 
     values(): URLSearchParamsIterator<string> {
-        return state(this).array.map(function (x) { return x[1]; }).values();
+        return makeIterator(state(this).array.map(function (x) { return x[1]; }));
     }
 
     declare [Symbol.iterator]: () => URLSearchParamsIterator<[string, string]>;

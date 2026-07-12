@@ -1,3 +1,4 @@
+// Safe fallback for Symbol.iterator and Symbol.toStringTag — uses native Symbol when available, string keys otherwise.
 export const _Symbol = {
     iterator: ((typeof Symbol === "function" && Symbol.iterator) || "Symbol(Symbol.iterator)" as never) as typeof Symbol.iterator,
     toStringTag: ((typeof Symbol === "function" && Symbol.toStringTag) || "Symbol(Symbol.toStringTag)" as never) as typeof Symbol.toStringTag,
@@ -51,6 +52,20 @@ export function isSequence(value: unknown): value is any[] {
         && iteratorSupported
         && Symbol.iterator in value
         && typeof (value as (object & Record<typeof Symbol.iterator, unknown>))[Symbol.iterator] === "function");
+}
+
+export function makeIterator<T>(array: T[]): IterableIterator<T> {
+    let index = 0;
+    let iterator: IterableIterator<T> = {
+        next: function (): IteratorResult<T> {
+            if (index < array.length) {
+                return { value: array[index++]!, done: false };
+            }
+            return { value: undefined as any, done: true };
+        },
+        [_Symbol.iterator]: function (): IterableIterator<T> { return iterator; },
+    };
+    return iterator;
 }
 
 export function checkArgsLength(actual: number, expect: number, className: string, funcName?: string) {

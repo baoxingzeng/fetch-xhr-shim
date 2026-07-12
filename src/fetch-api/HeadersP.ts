@@ -1,4 +1,4 @@
-import { _Symbol, setState, isPolyfillType, isSequence, checkArgsLength } from "../utils";
+import { _Symbol, setState, isPolyfillType, isSequence, makeIterator, checkArgsLength } from "../utils";
 
 export class HeadersP implements Headers {
     constructor(init?: HeadersInit) {
@@ -84,19 +84,19 @@ export class HeadersP implements Headers {
     entries(): HeadersIterator<[string, string]> {
         let array: [string, string][] = [];
         this.forEach(function (value, name) { array.push([name, value]); });
-        return array.values();
+        return makeIterator(array);
     }
 
     keys(): HeadersIterator<string> {
         let array: [string, string][] = [];
         this.forEach(function (value, name) { array.push([name, value]); });
-        return array.map(function (x) { return x[0]; }).values();
+        return makeIterator(array.map(function (x) { return x[0]; }));
     }
 
     values(): HeadersIterator<string> {
         let array: [string, string][] = [];
         this.forEach(function (value, name) { array.push([name, value]); });
-        return array.map(function (x) { return x[1]; }).values();
+        return makeIterator(array.map(function (x) { return x[1]; }));
     }
 
     declare [Symbol.iterator]: () => HeadersIterator<[string, string]>;

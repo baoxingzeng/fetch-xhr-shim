@@ -1,6 +1,6 @@
 import { File, FileP } from "../file-system/FileP";
 import { Blob, BlobP, isBlob } from "../file-system/BlobP";
-import { _Symbol, setState, isPolyfillType, checkArgsLength } from "../utils";
+import { _Symbol, setState, isPolyfillType, makeIterator, checkArgsLength } from "../utils";
 
 export class FormDataP implements FormData {
     constructor(form?: HTMLFormElement, submitter?: HTMLElement | null) {
@@ -135,15 +135,15 @@ export class FormDataP implements FormData {
     }
 
     entries(): FormDataIterator<[string, FormDataEntryValue]> {
-        return state(this).array.map(function (x) { return [x[0], x[1]] as [string, FormDataEntryValue]; }).values();
+        return makeIterator(state(this).array.map(function (x) { return [x[0], x[1]] as [string, FormDataEntryValue]; }));
     }
 
     keys(): FormDataIterator<string> {
-        return state(this).array.map(function (x) { return x[0]; }).values();
+        return makeIterator(state(this).array.map(function (x) { return x[0]; }));
     }
 
     values(): FormDataIterator<FormDataEntryValue> {
-        return state(this).array.map(function (x) { return x[1]; }).values();
+        return makeIterator(state(this).array.map(function (x) { return x[1]; }));
     }
 
     declare [Symbol.iterator]: () => FormDataIterator<[string, FormDataEntryValue]>;

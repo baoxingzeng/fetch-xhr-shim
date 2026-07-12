@@ -17,4 +17,4 @@ export { Payload, BodyImpl, initBody } from "./fetch-api/BodyImpl";
 export { normalizeMethod, createPhonyPayload } from "./fetch-api/RequestP";
 
 export { DOMException, DOMExceptionP } from "./utils";
-export { _Symbol, className, setState, isObjectType, isPolyfillType, isSequence, checkArgsLength } from "./utils";
+export { _Symbol, className, setState, isObjectType, isPolyfillType, isSequence, makeIterator, checkArgsLength } from "./utils";
