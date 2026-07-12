@@ -11,7 +11,7 @@ export class FormDataP implements FormData {
                 let elements = form.elements;
                 for (let i = 0; i < elements.length; ++i) {
                     let elm = elements[i]! as HTMLFormElement;
-                    if (!elm.name || elm.disabled || elm.type === "submit" || elm.type === "button" || elm.matches("form fieldset[disabled] *")) return;
+                    if (!elm.name || elm.disabled || elm.type === "submit" || elm.type === "button" || matches(elm, "form fieldset[disabled] *")) return;
 
                     if (elm.type === "file") {
                         let files: File[] = elm.files && elm.files.length
@@ -185,6 +185,28 @@ function normalizeArgs(name: string, value: string | Blob, filename?: string): [
         return ["" + name, value as File];
     }
     return ["" + name, "" + value];
+}
+
+// Polyfill for Element.prototype.matches, 
+// tries native, then vendor prefixes, then querySelectorAll fallback.
+function matches(elm: HTMLFormElement, selectors: string) {
+    let proto = (typeof Element !== "undefined" && Element && Element.prototype) as Element;
+    if (proto && !proto.matches) {
+        proto.matches =                     // @ts-ignore
+            proto.matchesSelector ||        // @ts-ignore
+            proto.mozMatchesSelector ||     // @ts-ignore
+            proto.msMatchesSelector ||      // @ts-ignore
+            proto.oMatchesSelector ||       // @ts-ignore
+            proto.webkitMatchesSelector ||  // @ts-ignore
+            function (this: Element, s: string) {
+                let matches = (this.ownerDocument || (this as any).document).querySelectorAll(s);
+                let i = matches.length;
+                while (--i >= 0 && matches.item(i) !== this) { }
+                return i > -1;
+            };
+    }
+
+    return proto ? proto.matches.call(elm, selectors) : false;
 }
 
 export function isFormData(value: unknown): value is FormData {
