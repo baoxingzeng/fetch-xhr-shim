@@ -1,4 +1,4 @@
-import { _Symbol, className, setState, typeString, isObjectType } from "../utils";
+import { _Symbol, className, setState, typeString } from "../utils";
 import { isArrayBuffer } from "../encoding/TextDecoderP";
 import { isURLSearchParams } from "../network/URLSearchParamsP";
 import { Blob, isBlob, encode, decode } from "../file-system/BlobP";
@@ -142,7 +142,7 @@ function state(target: BodyImpl) {
 
 export function initBody(instance: Body, body?: BodyInit | null | undefined) {
     const b = instance as BodyImpl;
-    if (isGlobalReadableStream(body) || isOtherReadableStream(body)) {
+    if (isReadableStream(body)) {
         throw new TypeError(`Failed to construct '${className(b)}': ReadableStream not implemented.`);
     }
 
@@ -189,16 +189,15 @@ function consumed(body: BodyImpl, kind: string) {
     return Promise.reject(new TypeError(`Failed to execute '${kind}' on '${className(body)}': body stream already read`));
 }
 
-function isGlobalReadableStream(value: unknown): value is ReadableStream {
-    return !!value
-        && typeof value === "object"
-        && typeof ReadableStream === "function" && value instanceof ReadableStream;
+function isReadableStream(value: unknown): value is ReadableStream {
+    return isExternalReadableStream(value);
 }
 
-function isOtherReadableStream(value: unknown): value is ReadableStream {
+function isExternalReadableStream(value: unknown): value is ReadableStream {
+    let expect = "[object ReadableStream]";
     return !!value
         && typeof value === "object"
         && "getReader" in (value as object)
         && typeof (value as (object & Record<"getReader", unknown>)).getReader === "function"
-        && (isObjectType<ReadableStream>("ReadableStream", value) || typeString(value) === "[object ReadableStream]");
+        && (Object.prototype.toString.call(value) === expect || typeString(value) === expect);
 }

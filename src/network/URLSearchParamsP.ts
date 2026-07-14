@@ -238,10 +238,10 @@ function decode(str: string) {
 }
 
 export function isURLSearchParams(value: unknown): value is URLSearchParams {
-    return isPolyfillType<URLSearchParams>("URLSearchParams", value) || isGlobalURLSearchParams(value);
+    return isPolyfillType<URLSearchParams>("URLSearchParams", value) || isExternalURLSearchParams(value);
 }
 
-function isGlobalURLSearchParams(value: unknown): value is URLSearchParams {
+function isExternalURLSearchParams(value: unknown): value is URLSearchParams {
     return isObjectType<URLSearchParams>("URLSearchParams", value) || (
         !!value &&
         typeof value === "object" &&
