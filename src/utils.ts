@@ -24,6 +24,11 @@ export function setState<T extends object, K extends keyof T>(target: T, name: K
     Object.defineProperty(target, name, { value });
 }
 
+export function typeString(value?: any): string {
+    try { return String(value); }
+    catch (e) { return "[object Unknown]"; }
+}
+
 export function isObjectType<T>(name: string, value: unknown): value is T {
     return Object.prototype.toString.call(value) === `[object ${name}]`;
 }

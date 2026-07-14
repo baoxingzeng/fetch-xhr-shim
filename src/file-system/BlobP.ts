@@ -1,6 +1,6 @@
 import { TextEncoder } from "../encoding/TextEncoderP";
 import { TextDecoder, isArrayBuffer } from "../encoding/TextDecoderP";
-import { _Symbol, setState, isPolyfillType, isSequence } from "../utils";
+import { _Symbol, setState, typeString, isPolyfillType, isSequence } from "../utils";
 
 export const encode = TextEncoder.prototype.encode.bind(new TextEncoder());
 export const decode = TextDecoder.prototype.decode.bind(new TextDecoder());
@@ -169,13 +169,13 @@ function isExternalBlob(value: unknown, strict = false): value is Blob {
     let expects = ["[object Blob]"];
     if (!strict) expects.push("[object File]");
 
-    return (expects.indexOf(Object.prototype.toString.call(value)) > -1 || expects.indexOf(String(value)) > -1)
-        && !!value
+    return !!value
         && typeof value === "object"
         && "size" in (value as object)
         && typeof (value as (object & Record<"size", unknown>)).size === "number"
         && "arrayBuffer" in (value as object)
-        && typeof (value as (object & Record<"arrayBuffer", unknown>)).arrayBuffer === "function";
+        && typeof (value as (object & Record<"arrayBuffer", unknown>)).arrayBuffer === "function"
+        && (expects.indexOf(Object.prototype.toString.call(value)) > -1 || expects.indexOf(typeString(value)) > -1);
 }
 
 const BlobE = (function () { try { return new Blob(['ä']).size === 2; } catch (e) { return false; } })() as true ? Blob : BlobP;

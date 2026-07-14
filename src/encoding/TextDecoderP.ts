@@ -1,4 +1,4 @@
-import { _Symbol, setState, isObjectType } from "../utils";
+import { _Symbol, setState, typeString, isObjectType } from "../utils";
 
 const validLabels = ["utf-8", "utf8", "unicode-1-1-utf-8"];
 
@@ -192,11 +192,11 @@ function concatString(val: number[]) {
 
 // Mini Program
 function isOtherArrayBuffer(value: unknown): value is ArrayBuffer {
-    return (isObjectType<ArrayBuffer>("ArrayBuffer", value) || String(value) === "[object ArrayBuffer]")
-        && !!value
+    return !!value
         && typeof value === "object"
         && "byteLength" in (value as object)
-        && typeof (value as (object & Record<"byteLength", unknown>)).byteLength === "number";
+        && typeof (value as (object & Record<"byteLength", unknown>)).byteLength === "number"
+        && (isObjectType<ArrayBuffer>("ArrayBuffer", value) || typeString(value) === "[object ArrayBuffer]");
 }
 
 export function isArrayBuffer(value: unknown): value is ArrayBuffer {

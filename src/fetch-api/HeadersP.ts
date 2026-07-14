@@ -1,4 +1,4 @@
-import { _Symbol, setState, isPolyfillType, isSequence, makeIterator, checkArgsLength } from "../utils";
+import { _Symbol, setState, typeString, isPolyfillType, isSequence, makeIterator, checkArgsLength } from "../utils";
 
 export class HeadersP implements Headers {
     constructor(init?: HeadersInit) {
@@ -144,11 +144,11 @@ export function isHeaders(value: unknown): value is Headers {
 
 function isExternalHeaders(value: unknown): value is Headers {
     let expect = "[object Headers]";
-    return (Object.prototype.toString.call(value) === expect || String(value) === expect)
-        && !!value
+    return !!value
         && typeof value === "object"
         && "forEach" in (value as object)
-        && typeof (value as (object & Record<"forEach", unknown>)).forEach === "function";
+        && typeof (value as (object & Record<"forEach", unknown>)).forEach === "function"
+        && (Object.prototype.toString.call(value) === expect || typeString(value) === expect);
 }
 
 export function normalizeName(name: string, throwError?: () => never) {

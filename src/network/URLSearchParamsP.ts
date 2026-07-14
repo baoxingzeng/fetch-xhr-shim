@@ -245,9 +245,7 @@ function isGlobalURLSearchParams(value: unknown): value is URLSearchParams {
     return isObjectType<URLSearchParams>("URLSearchParams", value) || (
         !!value &&
         typeof value === "object" &&
-        typeof URLSearchParams !== "undefined" &&
-        URLSearchParams &&
-        URLSearchParams.prototype.isPrototypeOf(value)
+        typeof URLSearchParams === "function" && value instanceof URLSearchParams
     );
 }
 

@@ -2,7 +2,7 @@ import { Headers, createHeaders } from "./HeadersP";
 import { BodyImpl, initBody, Payload } from "./BodyImpl";
 import { AbortController } from "../event-system/AbortControllerP";
 import { isEventTarget } from "../event-system/EventTargetP";
-import { _Symbol, setState, isPolyfillType, checkArgsLength } from "../utils";
+import { _Symbol, setState, typeString, isPolyfillType, checkArgsLength } from "../utils";
 
 export class RequestP extends BodyImpl implements Request {
     constructor(input: RequestInfo | URL, init?: RequestInit) {
@@ -124,11 +124,11 @@ function isRequest(value: unknown): value is Request {
 
 function isExternalRequest(value: unknown): value is Request {
     let expect = "[object Request]";
-    return (Object.prototype.toString.call(value) === expect || String(value) === expect)
-        && !!value
+    return !!value
         && typeof value === "object"
         && "arrayBuffer" in (value as object)
-        && typeof (value as (object & Record<"arrayBuffer", unknown>)).arrayBuffer === "function";
+        && typeof (value as (object & Record<"arrayBuffer", any>)).arrayBuffer === "function"
+        && (Object.prototype.toString.call(value) === expect || typeString(value) === expect);
 }
 
 export function createPhonyPayload(request: Request): Payload {

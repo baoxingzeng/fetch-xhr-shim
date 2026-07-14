@@ -1,4 +1,4 @@
-import { _Symbol, className, setState, isObjectType } from "../utils";
+import { _Symbol, className, setState, typeString, isObjectType } from "../utils";
 import { isArrayBuffer } from "../encoding/TextDecoderP";
 import { isURLSearchParams } from "../network/URLSearchParamsP";
 import { Blob, isBlob, encode, decode } from "../file-system/BlobP";
@@ -190,17 +190,15 @@ function consumed(body: BodyImpl, kind: string) {
 }
 
 function isGlobalReadableStream(value: unknown): value is ReadableStream {
-    return !!value &&
-        typeof value === "object" &&
-        typeof ReadableStream !== "undefined" &&
-        ReadableStream &&
-        ReadableStream.prototype.isPrototypeOf(value);
+    return !!value
+        && typeof value === "object"
+        && typeof ReadableStream === "function" && value instanceof ReadableStream;
 }
 
 function isOtherReadableStream(value: unknown): value is ReadableStream {
-    return (isObjectType<ReadableStream>("ReadableStream", value) || String(value) === "[object ReadableStream]")
-        && !!value
+    return !!value
         && typeof value === "object"
         && "getReader" in (value as object)
-        && typeof (value as (object & Record<"getReader", unknown>)).getReader === "function";
+        && typeof (value as (object & Record<"getReader", unknown>)).getReader === "function"
+        && (isObjectType<ReadableStream>("ReadableStream", value) || typeString(value) === "[object ReadableStream]");
 }
