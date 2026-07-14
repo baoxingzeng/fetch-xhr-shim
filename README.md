@@ -1,9 +1,8 @@
 # fetch-xhr-shim <!-- omit in toc -->
 
 A comprehensive polyfill for the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) 
-and its entire ecosystem — `fetch`, `Blob`, `FormData`, `Headers`, `Request`, `Response`, `AbortController`, 
-and more. All network requests go through `XMLHttpRequest` under the hood, 
-so it works anywhere XHR is available: browsers, Node.js, mini-programs, you name it.
+and its entire ecosystem — `fetch`, `Blob`, `FormData`, `Headers`, `Request`, `Response`, `AbortController`, and more.
+All network requests go through `XMLHttpRequest` under the hood, so it works anywhere XHR is available: browsers, Node.js, you name it.
 
 When a native implementation exists, it's used directly. When it doesn't, the polyfill kicks in.
 
@@ -26,7 +25,6 @@ When a native implementation exists, it's used directly. When it doesn't, the po
   - [TextEncoder](#textencoder)
   - [TextDecoder](#textdecoder)
 - [Fix Functions](#fix-functions)
-- [Auto Import](#auto-import)
 - [Node.js](#nodejs)
 - [License](#license)
 
@@ -67,8 +65,8 @@ If you prefer explicit imports, every module has two export variants:
 - The **`P`-suffixed export** (e.g. `fetchP`) returns the polyfill implementation directly, bypassing the native check.
 
 ```js
-import { fetch } from "fetch-xhr-shim";   // native fetch if available, otherwise polyfill
-import { fetchP } from "fetch-xhr-shim";   // always the polyfill version
+import { fetch } from "fetch-xhr-shim";  // native fetch if available, otherwise polyfill
+import { fetchP } from "fetch-xhr-shim"; // always the polyfill version
 ```
 
 This pattern applies to every API: `Blob` / `BlobP`, `FormData` / `FormDataP`, `Headers` / `HeadersP`, and so on.
@@ -281,7 +279,7 @@ import { Headers, fetch } from "fetch-xhr-shim";
 const myHeaders = new Headers();
 
 myHeaders.append("Content-Type", "text/plain");
-myHeaders.get("Content-Type"); // 'text/plain'
+myHeaders.get("Content-Type"); // "text/plain"
 
 fetch("https://example.com/headers", {
     headers: myHeaders,
@@ -300,7 +298,7 @@ let myHeaders = new Headers({
 // or, using an array of arrays:
 myHeaders = new Headers([["Content-Type", "text/plain"]]);
 
-myHeaders.get("Content-Type"); // 'text/plain'
+myHeaders.get("Content-Type"); // "text/plain"
 ```
 
 #### Compatibility <!-- omit in toc -->
@@ -756,51 +754,6 @@ Patches `WebSocket.prototype` so the native WebSocket can send polyfill `Blob` d
 import { fixWebSocket } from "fetch-xhr-shim";
 
 fixWebSocket();   // You can also pass a specific WebSocket class to fix.
-```
-
-## Auto Import
-
-See [unplugin-auto-import](https://www.npmjs.com/package/unplugin-auto-import) for more details.
-
-```javascript
-// for reference only
-AutoImport({
-    // other configs
-
-    imports: [
-        // other imports
-
-        {
-            "fetch-xhr-shim": [
-                "fetch",
-                "Headers",
-                "Request",
-                "Response",
-
-                "Blob",
-                "File",
-                "FileReader",
-
-                "URLSearchParams",
-                "FormData",
-
-                "AbortController",
-                "AbortSignal",
-
-                "EventTarget",
-                "Event",
-                "CustomEvent",
-
-                "TextEncoder",
-                "TextDecoder",
-            ],
-        },
-
-        // other imports
-    ],
-
-    // other configs
-});
 ```
 
 ## Node.js
