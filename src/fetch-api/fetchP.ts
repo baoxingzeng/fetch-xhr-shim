@@ -7,9 +7,9 @@ import { isHeaders, normalizeName, normalizeValue, parseHeaders } from "./Header
 const mp = { XMLHttpRequest: (typeof XMLHttpRequest !== "undefined" && XMLHttpRequest) as typeof XMLHttpRequest || undefined };
 export function setXMLHttpRequestClass(XHRClass: unknown) { mp.XMLHttpRequest = XHRClass as typeof XMLHttpRequest; }
 
-export function fetchP(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
-    checkArgsLength(arguments.length, 1, "Window", "fetch");    // @ts-expect-error
+export function fetchP(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {   // @ts-expect-error
     if (this instanceof fetchP) { throw new TypeError("fetch is not a constructor"); }
+    checkArgsLength(arguments.length, 1, "globalThis", "fetch");
 
     return new Promise(function (resolve: ((value: Response) => void), reject: ((reason?: any) => void)) {
         const request = new RequestP(input, init);
@@ -121,7 +121,7 @@ function createAbortException() {
 }
 
 const locationSupported = typeof location !== "undefined" && !!location;
-const fixUrl = function (url: string) { if (url === "" && locationSupported && location?.href) { return location.href } else { return url; } }
+const fixUrl = function (url: string) { if (url === "" && locationSupported && location?.href) { return location.href; } else { return url; } }
 
 const fetchE = (typeof fetch !== "undefined" && fetch) as typeof fetch || fetchP;
 export { fetchE as fetch };
