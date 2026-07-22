@@ -2,6 +2,7 @@ import { fetchP } from "./fetch-api/fetchP";
 import { Payload } from "./fetch-api/BodyImpl";
 import { createPhonyPayload } from "./fetch-api/RequestP";
 import { isBlob } from "./file-system/BlobP";
+import { isURLSearchParams } from "./network/URLSearchParamsP";
 import { isFormData, FormData_toBlob } from "./network/FormDataP";
 import { isEventTarget } from "./event-system/EventTargetP";
 import { DOMException, setState, isPolyfillType, isSequence } from "./utils";
@@ -146,9 +147,11 @@ export function fixFetch(fetchFunc?: typeof fetch): typeof fetch {
                     })
                     .then(function () { if (removeFn) { removeFn(); } }); // finally
             } else {
-                if (init && init.body && isPolyfillType<URLSearchParams>("URLSearchParams", init.body)) {
+                if (init && init.body && (fullOverride.value ? isURLSearchParams(init.body) : isPolyfillType<URLSearchParams>("URLSearchParams", init.body))) {
                     setContentType(init, "application/x-www-form-urlencoded;charset=UTF-8");
+                    init.body = (init.body as URLSearchParams).toString();
                 }
+
                 resolve(fetchFn.call(this, input, init));
             }
         }).bind(this));
@@ -214,8 +217,11 @@ export function fixXMLHttpRequest(XHRClass?: typeof XMLHttpRequest) {
                     console.error(e);
                 }).bind(this));
         } else {
-            if (isPolyfillType<URLSearchParams>("URLSearchParams", body) && !state(this).hasContentType)
+            if (!state(this).hasContentType && (fullOverride.value ? isURLSearchParams(body) : isPolyfillType<URLSearchParams>("URLSearchParams", body))) {
                 this.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+                body = (body as URLSearchParams).toString();
+            }
+
             _send.call(this, body);
         }
     }
