@@ -217,8 +217,8 @@ export function fixXMLHttpRequest(XHRClass?: typeof XMLHttpRequest) {
                     console.error(e);
                 }).bind(this));
         } else {
-            if (!state(this).hasContentType && (fullOverride.value ? isURLSearchParams(body) : isPolyfillType<URLSearchParams>("URLSearchParams", body))) {
-                this.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+            if (fullOverride.value ? isURLSearchParams(body) : isPolyfillType<URLSearchParams>("URLSearchParams", body)) {
+                if (!state(this).hasContentType) { this.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8"); }
                 body = (body as URLSearchParams).toString();
             }
 
