@@ -1,6 +1,6 @@
 import { File, FileP } from "../file-system/FileP";
 import { Blob, BlobP, isBlob } from "../file-system/BlobP";
-import { _Symbol, setState, typeString, isPolyfillType, makeIterator, checkArgsLength } from "../utils";
+import { _Symbol, setState, safeString, isPolyfillType, makeIterator, checkArgsLength } from "../utils";
 
 export class FormDataP implements FormData {
     constructor(form?: HTMLFormElement, submitter?: HTMLElement | null) {
@@ -219,7 +219,7 @@ function isExternalFormData(value: unknown): value is FormData {
         && typeof value === "object"
         && "forEach" in (value as object)
         && typeof (value as (object & Record<"forEach", unknown>)).forEach === "function"
-        && (Object.prototype.toString.call(value) === expect || typeString(value) === expect);
+        && (Object.prototype.toString.call(value) === expect || safeString(value) === expect);
 }
 
 export function FormData_toBlob(formData: FormData, externalBoundary?: string): Blob {

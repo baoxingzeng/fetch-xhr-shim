@@ -24,8 +24,8 @@ export function setState<T extends object, K extends keyof T>(target: T, name: K
     Object.defineProperty(target, name, { value });
 }
 
-// Safe wrapper around String() for type-like representations (e.g. "[object Blob]").   Axios
-export function typeString(value?: any): string {
+// Safe wrapper around String() — catches errors and returns "[object Unknown]" as fallback.
+export function safeString(value?: any): string {
     try { return String(value); } catch (e) { return "[object Unknown]"; }
 }
 

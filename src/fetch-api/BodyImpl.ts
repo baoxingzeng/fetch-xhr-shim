@@ -1,4 +1,4 @@
-import { _Symbol, className, setState, typeString } from "../utils";
+import { _Symbol, className, setState, safeString } from "../utils";
 import { isArrayBuffer } from "../encoding/TextDecoderP";
 import { isURLSearchParams } from "../network/URLSearchParamsP";
 import { Blob, isBlob, encode, decode } from "../file-system/BlobP";
@@ -199,5 +199,5 @@ function isExternalReadableStream(value: unknown): value is ReadableStream {
         && typeof value === "object"
         && "getReader" in (value as object)
         && typeof (value as (object & Record<"getReader", unknown>)).getReader === "function"
-        && (Object.prototype.toString.call(value) === expect || typeString(value) === expect);
+        && (Object.prototype.toString.call(value) === expect || safeString(value) === expect);
 }

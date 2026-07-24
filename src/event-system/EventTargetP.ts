@@ -1,5 +1,5 @@
 import { EventP, Event_setTrusted } from "./EventP";
-import { _Symbol, className, setState, typeString, isPolyfillType, checkArgsLength } from "../utils";
+import { _Symbol, className, setState, safeString, isPolyfillType, checkArgsLength } from "../utils";
 
 export class EventTargetP implements EventTarget {
     constructor() {
@@ -86,7 +86,7 @@ function isEvent(value: unknown): value is Event {
         && typeof value === "object"
         && "type" in value
         && typeof value.type === "string"
-        && (predicate(Object.prototype.toString.call(value)) || predicate(typeString(value)));
+        && (predicate(Object.prototype.toString.call(value)) || predicate(safeString(value)));
 }
 
 function whenAbort(target: EventTargetP, executor: Executor, signal: AbortSignal) {

@@ -1,4 +1,4 @@
-import { _Symbol, setState, typeString, isObjectType } from "../utils";
+import { _Symbol, setState, safeString, isObjectType } from "../utils";
 
 const validLabels = ["utf-8", "utf8", "unicode-1-1-utf-8"];
 
@@ -196,7 +196,7 @@ function isOtherArrayBuffer(value: unknown): value is ArrayBuffer {
         && typeof value === "object"
         && "byteLength" in (value as object)
         && typeof (value as (object & Record<"byteLength", unknown>)).byteLength === "number"
-        && (isObjectType<ArrayBuffer>("ArrayBuffer", value) || typeString(value) === "[object ArrayBuffer]");
+        && (isObjectType<ArrayBuffer>("ArrayBuffer", value) || safeString(value) === "[object ArrayBuffer]");
 }
 
 export function isArrayBuffer(value: unknown): value is ArrayBuffer {
