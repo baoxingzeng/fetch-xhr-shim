@@ -59,5 +59,9 @@ function isFileSupported() {
     try { new File([], ""); return true; } catch (e) { return false; }
 }
 
-const FileE = isFileSupported() as true ? File : (Blob === BlobP ? FilePolyfill : createFileClass(Blob));
+function getFileClass() {
+    return isFileSupported() as true ? File : (Blob === BlobP ? FilePolyfill : createFileClass(Blob));
+}
+
+const FileE = getFileClass();
 export { FileE as File };
