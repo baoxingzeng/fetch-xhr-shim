@@ -13,11 +13,7 @@ export class DOMExceptionP extends Error {
     /** @internal */ get __MPHTTPX__() { return { chain: ["DOMException"] }; }
 }
 
-function isDOMExceptionSupported() {
-    try { new DOMException(); return true; } catch (e) { return false; }
-}
-
-const DOMExceptionE = isDOMExceptionSupported() ? DOMException : DOMExceptionP as never;
+const DOMExceptionE = (typeof DOMException !== "undefined" && DOMException) as typeof DOMException || DOMExceptionP;
 export { DOMExceptionE as DOMException };
 
 export function className(object: { __MPHTTPX__: { chain: string[] } }): string {
