@@ -116,7 +116,7 @@ function getTimeNow() {
     return (new Date()).getTime();
 }
 
-const timeStamp = getTimeNow();
+const timeStamp = /*#__PURE__*/getTimeNow();
 
 function getFuncName(func: Function): string {
     // ES5

@@ -2,8 +2,8 @@ import { _Symbol, setState, safeString, isPolyfillType, isSequence } from "../ut
 import { TextEncoder } from "../encoding/TextEncoderP";
 import { TextDecoder, isArrayBuffer, ArrayBuffer_isView } from "../encoding/TextDecoderP";
 
-export const encode = TextEncoder.prototype.encode.bind(new TextEncoder());
-export const decode = TextDecoder.prototype.decode.bind(new TextDecoder());
+export const encode = /*#__PURE__*/function () { return TextEncoder.prototype.encode.bind(new TextEncoder()); }();
+export const decode = /*#__PURE__*/function () { return TextDecoder.prototype.decode.bind(new TextDecoder()); }();
 
 const mp = { ReadableStream: (typeof ReadableStream !== "undefined" && ReadableStream) as typeof ReadableStream || undefined };
 export function setReadableStreamClass(RSClass: unknown) { mp.ReadableStream = RSClass as typeof ReadableStream; }
@@ -182,5 +182,9 @@ function isBlobSupported() {
     try { return (new Blob(["ä"])).size === 2; } catch (e) { return false; }
 }
 
-const BlobE = isBlobSupported() as true ? Blob : BlobP;
+function getBlobClass() {
+    return isBlobSupported() as true ? Blob : BlobP;
+}
+
+const BlobE = /*#__PURE__*/getBlobClass();
 export { BlobE as Blob };

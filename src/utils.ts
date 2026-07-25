@@ -17,7 +17,11 @@ function isDOMExceptionSupported() {
     try { new DOMException(); return true; } catch (e) { return false; }
 }
 
-const DOMExceptionE = isDOMExceptionSupported() ? DOMException : DOMExceptionP as never;
+function getDOMExceptionClass() {
+    return isDOMExceptionSupported() ? DOMException : DOMExceptionP as never;
+}
+
+const DOMExceptionE = /*#__PURE__*/getDOMExceptionClass();
 export { DOMExceptionE as DOMException };
 
 export function className(object: { __MPHTTPX__: { chain: string[] } }): string {

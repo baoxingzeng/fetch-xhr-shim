@@ -52,7 +52,7 @@ function state(target: { __File__: FileState }) {
     return target.__File__;
 }
 
-const FilePolyfill = createFileClass(BlobP);
+const FilePolyfill = /*#__PURE__*/createFileClass(BlobP);
 export { FilePolyfill as FileP };
 
 function isFileSupported() {
@@ -63,5 +63,5 @@ function getFileClass() {
     return isFileSupported() as true ? File : (Blob === BlobP ? FilePolyfill : createFileClass(Blob));
 }
 
-const FileE = getFileClass();
+const FileE = /*#__PURE__*/getFileClass();
 export { FileE as File };
