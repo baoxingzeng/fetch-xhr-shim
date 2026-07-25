@@ -1,6 +1,6 @@
-import { TextEncoder } from "../encoding/TextEncoderP";
-import { TextDecoder, isArrayBuffer } from "../encoding/TextDecoderP";
 import { _Symbol, setState, safeString, isPolyfillType, isSequence } from "../utils";
+import { TextEncoder } from "../encoding/TextEncoderP";
+import { TextDecoder, isArrayBuffer, ArrayBuffer_isView } from "../encoding/TextDecoderP";
 
 export const encode = TextEncoder.prototype.encode.bind(new TextEncoder());
 export const decode = TextDecoder.prototype.decode.bind(new TextDecoder());
@@ -24,7 +24,7 @@ export class BlobP implements Blob {
                 size += chunk.size;
                 tasks.push(chunk.arrayBuffer().then(function (r: ArrayBuffer) { return new Uint8Array(r); }));
             } else {
-                let bytes = (isArrayBuffer(chunk) || ArrayBuffer.isView(chunk))
+                let bytes = (isArrayBuffer(chunk) || ArrayBuffer_isView(chunk))
                     ? BufferSource_toUint8Array(chunk)
                     : encode(chunk);
                 size += bytes.length;
@@ -53,7 +53,7 @@ export class BlobP implements Blob {
     slice(start?: number, end?: number, contentType?: string): Blob {
         let _start = start ?? 0, _end = end ?? this.size;
         let blob = Object.create(BlobP.prototype) as BlobP;
-        setState(blob, "__Blob__", new BlobState(state(this).promise.then(function (r) { return clone(r.slice(_start, _end)); })));
+        setState(blob, "__Blob__", new BlobState(state(this).promise.then(function (r) { return clone(r.slice(_start, _end)); }))); // × WeChat 2.5.0
         state(blob).size = calcSlicedSize(this.size, _start, _end);
         state(blob).type = normalizeType(contentType);
         return blob;
@@ -178,5 +178,9 @@ function isExternalBlob(value: unknown, strict = false): value is Blob {
         && (expects.indexOf(Object.prototype.toString.call(value)) > -1 || expects.indexOf(safeString(value)) > -1);
 }
 
-const BlobE = (function () { try { return new Blob(['ä']).size === 2; } catch (e) { return false; } })() as true ? Blob : BlobP;
+function isBlobSupported() {
+    try { return (new Blob(["ä"])).size === 2; } catch (e) { return false; }
+}
+
+const BlobE = isBlobSupported() as true ? Blob : BlobP;
 export { BlobE as Blob };

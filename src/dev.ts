@@ -1,4 +1,4 @@
-export { isArrayBuffer } from "./encoding/TextDecoderP";
+export { isArrayBuffer, ArrayBuffer_isView } from "./encoding/TextDecoderP";
 
 export { isEventTarget, EventTarget_dispatchEvent, attachFn, executeFn } from "./event-system/EventTargetP";
 export { Event_setTrusted } from "./event-system/EventP";

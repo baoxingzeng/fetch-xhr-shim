@@ -1,5 +1,5 @@
 import { _Symbol, className, setState, safeString } from "../utils";
-import { isArrayBuffer } from "../encoding/TextDecoderP";
+import { isArrayBuffer, ArrayBuffer_isView } from "../encoding/TextDecoderP";
 import { isURLSearchParams } from "../network/URLSearchParamsP";
 import { Blob, isBlob, encode, decode } from "../file-system/BlobP";
 import { FormData_toBlob, isFormData, extractBoundary, createFormDataFromBinaryText } from "../network/FormDataP";
@@ -28,7 +28,7 @@ export class Payload {
             this.length = body.byteLength;
         }
 
-        else if (ArrayBuffer.isView(body)) {
+        else if (ArrayBuffer_isView(body)) {
             let _body = body.buffer.slice(body.byteOffset, body.byteOffset + body.byteLength);
             this.promise = Promise.resolve(_body);
             this.length = _body.byteLength;
@@ -142,7 +142,7 @@ function state(target: BodyImpl) {
 
 export function initBody(instance: Body, body?: BodyInit | null | undefined) {
     const b = instance as BodyImpl;
-    if (isReadableStream(body)) {
+    if (isExternalReadableStream(body)) {
         throw new TypeError(`Failed to construct '${className(b)}': ReadableStream not implemented.`);
     }
 
@@ -187,10 +187,6 @@ function consumed(body: BodyImpl, kind: string) {
     if (!state(body).payload) return;
     if (!body.bodyUsed) { state(body).bodyUsed = true; return; }
     return Promise.reject(new TypeError(`Failed to execute '${kind}' on '${className(body)}': body stream already read`));
-}
-
-function isReadableStream(value: unknown): value is ReadableStream {
-    return isExternalReadableStream(value);
 }
 
 function isExternalReadableStream(value: unknown): value is ReadableStream {

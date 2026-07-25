@@ -75,7 +75,7 @@ export function fixFetch(fetchFunc?: typeof fetch): typeof fetch {
     function _fetch(this: typeof globalThis, input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
         if (isPolyfillType<Request>("Request", input)) {
             let _input = input as Request;
-            let _init = init || {};
+            let _init = init ?? {}; if (typeof _init !== "object") { _init = {}; }
 
             if (!_init.method) { _init.method = _input.method; }
             if (!_init.headers) { _init.headers = _input.headers; }

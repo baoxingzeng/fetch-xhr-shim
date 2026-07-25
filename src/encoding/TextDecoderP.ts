@@ -53,7 +53,7 @@ function decodeText(input?: AllowSharedBufferSource, { stream = false } = {}, se
 
     let bytes = isArrayBuffer(input)
         ? new Uint8Array(input)
-        : ArrayBuffer.isView(input)
+        : ArrayBuffer_isView(input)
             ? new Uint8Array(input.buffer, input.byteOffset, input.byteLength)
             : (function () { throw new TypeError("Input could not be converted to any of: ArrayBufferView, ArrayBuffer."); })();
 
@@ -201,6 +201,28 @@ function isOtherArrayBuffer(value: unknown): value is ArrayBuffer {
 
 export function isArrayBuffer(value: unknown): value is ArrayBuffer {
     return (!!value && typeof value === "object" && ArrayBuffer.prototype.isPrototypeOf(value)) || isOtherArrayBuffer(value);
+}
+
+function isArrayBufferView(value: any): value is ArrayBufferView {
+    const typedArrayTags = [
+        "[object Int8Array]",
+        "[object Uint8Array]",
+        "[object Uint8ClampedArray]",
+        "[object Int16Array]",
+        "[object Uint16Array]",
+        "[object Int32Array]",
+        "[object Uint32Array]",
+        "[object Float32Array]",
+        "[object Float64Array]",
+    ];
+    return (!!value && typeof value === "object") && (
+        typedArrayTags.indexOf(Object.prototype.toString.call(value)) > -1 ||
+        (typeof DataView !== "undefined" && DataView.prototype.isPrototypeOf(value))
+    );
+}
+
+export function ArrayBuffer_isView(value: any): value is ArrayBufferView {
+    return ArrayBuffer.isView ? ArrayBuffer.isView(value) : isArrayBufferView(value);
 }
 
 const TextDecoderE = (typeof TextDecoder !== "undefined" && TextDecoder) || TextDecoderP;

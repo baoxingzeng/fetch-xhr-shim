@@ -121,7 +121,7 @@ function createAbortException() {
 }
 
 const locationSupported = typeof location !== "undefined" && !!location;
-const fixUrl = function (url: string) { if (url === "" && locationSupported && location?.href) { return location.href; } else { return url; } }
+function fixUrl(url: string) { if (url === "" && locationSupported && location?.href) { return location.href; } else { return url; } }
 
 const fetchE = (typeof fetch !== "undefined" && fetch) as typeof fetch || fetchP;
 export { fetchE as fetch };

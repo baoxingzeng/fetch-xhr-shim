@@ -112,8 +112,7 @@ class FileReaderState {
         this.attach = attachFn<FileReader, keyof FileReaderEventMap>(target, getHandlers(target));
     }
 
-    pos: FRCycle = FRCycle.EMPTY;
-
+    /** @internal */ pos: FRCycle = FRCycle.EMPTY;
     readyState: FileReader["readyState"] = 0 /* EMPTY */;
     result: string | ArrayBuffer | null = null;
     error: DOMException | null = null;
@@ -230,10 +229,7 @@ export function Uint8Array_toBase64(input: Uint8Array<ArrayBuffer>) {
 
         if (!haveByte3) {
             outByte4 = 64;
-
-            if (!haveByte2) {
-                outByte3 = 64;
-            }
+            if (!haveByte2) { outByte3 = 64; }
         }
 
         output.push(

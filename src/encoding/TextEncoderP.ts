@@ -119,7 +119,7 @@ function encodeText(input: string, destination?: Uint8Array<ArrayBufferLike>) {
     }
 
     return {
-        encoded: !HAS_DESTINATION ? target.slice(0, at) : destination,
+        encoded: !HAS_DESTINATION ? target.slice(0, at) : destination,  // × WeChat 2.5.0
         read: read,
         written: at,
     };

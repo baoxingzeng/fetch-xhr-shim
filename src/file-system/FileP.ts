@@ -53,11 +53,11 @@ function state(target: { __File__: FileState }) {
 }
 
 const FilePolyfill = createFileClass(BlobP);
-const FileE = (function () { try { new File([], ""); return true; } catch (e) { return false; } })() as true
-    ? File
-    : Blob === BlobP
-        ? FilePolyfill
-        : createFileClass(Blob);
-
 export { FilePolyfill as FileP };
+
+function isFileSupported() {
+    try { new File([], ""); return true; } catch (e) { return false; }
+}
+
+const FileE = isFileSupported() as true ? File : (Blob === BlobP ? FilePolyfill : createFileClass(Blob));
 export { FileE as File };
