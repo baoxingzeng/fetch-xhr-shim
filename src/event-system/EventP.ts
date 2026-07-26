@@ -112,11 +112,7 @@ function state(target: EventP) {
     return target.__Event__;
 }
 
-function getTimeNow() {
-    return (new Date()).getTime();
-}
-
-const timeStamp = /*#__PURE__*/getTimeNow();
+const timeStamp = /*#__PURE__*/function () { return (new Date()).getTime(); }();
 
 function getFuncName(func: Function): string {
     // ES5
