@@ -1,11 +1,15 @@
 import { Payload } from "./BodyImpl";
 import { RequestP } from "./RequestP";
 import { ResponseP } from "./ResponseP";
+import { decode } from "../file-system/BlobP";
 import { DOMException, checkArgsLength } from "../utils";
 import { isHeaders, normalizeName, normalizeValue, parseHeaders } from "./HeadersP";
 
 const mp = { XMLHttpRequest: (typeof XMLHttpRequest !== "undefined" && XMLHttpRequest) as typeof XMLHttpRequest || undefined };
 export function setXMLHttpRequestClass(XHRClass: unknown) { mp.XMLHttpRequest = XHRClass as typeof XMLHttpRequest; }
+
+const textMode = { value: false };
+export function setTextMode(value: boolean) { textMode.value = !!value; }
 
 export function fetchP(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {   // @ts-expect-error
     if (this instanceof fetchP) { throw new TypeError("fetch is not a constructor"); }
@@ -106,7 +110,7 @@ export function fetchP(input: RequestInfo | URL, init?: RequestInit): Promise<Re
 
         if (!payload) xhr.send();
         else payload.promise.then(function (body) {
-            if (!aborted) xhr.send(body !== "" ? body : undefined);
+            if (!aborted) xhr.send(body !== "" ? coerceBody(body) : undefined);
             else reject(createAbortException());
         })
             .catch(function (e) {
@@ -122,6 +126,10 @@ function createAbortException() {
 
 const locationSupported = typeof location !== "undefined" && !!location;
 function fixUrl(url: string) { if (url === "" && locationSupported && location?.href) { return location.href; } else { return url; } }
+
+function coerceBody(data: string | ArrayBuffer) {
+    return (textMode.value && typeof data !== "string") ? decode(data) : data;
+}
 
 const fetchE = (typeof fetch !== "undefined" && fetch) as typeof fetch || fetchP;
 export { fetchE as fetch };

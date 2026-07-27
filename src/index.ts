@@ -21,5 +21,5 @@ export { Request, RequestP } from "./fetch-api/RequestP";
 export { Response, ResponseP } from "./fetch-api/ResponseP";
 
 export { setReadableStreamClass } from "./file-system/BlobP";
-export { setXMLHttpRequestClass } from "./fetch-api/fetchP";
+export { setXMLHttpRequestClass, setTextMode } from "./fetch-api/fetchP";
 export { fixFetch, fixXMLHttpRequest, fixWebSocket, setFullOverride } from "./fixes";
