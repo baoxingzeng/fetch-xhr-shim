@@ -25,6 +25,7 @@ When a native implementation exists, it's used directly. When it doesn't, the po
   - [TextEncoder](#textencoder)
   - [TextDecoder](#textdecoder)
 - [Fix Functions](#fix-functions)
+- [TextMode](#textmode)
 - [Node.js](#nodejs)
 - [License](#license)
 
@@ -754,6 +755,16 @@ Patches `WebSocket.prototype` so the native WebSocket can send polyfill `Blob` d
 import { fixWebSocket } from "fetch-xhr-shim";
 
 fixWebSocket();   // You can also pass a specific WebSocket class to fix.
+```
+
+## TextMode
+
+Some environments have an XHR implementation that only accepts strings in `send()`, not `ArrayBuffer`. When `textMode` is enabled, the polyfill will automatically decode `ArrayBuffer` bodies to strings before sending.
+
+```javascript
+import { setTextMode } from "fetch-xhr-shim";
+
+setTextMode(true);   // polyfill types will be sent as strings instead of ArrayBuffer
 ```
 
 ## Node.js

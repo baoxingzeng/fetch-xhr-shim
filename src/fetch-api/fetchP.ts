@@ -127,7 +127,7 @@ function createAbortException() {
 const locationSupported = typeof location !== "undefined" && !!location;
 function fixUrl(url: string) { if (url === "" && locationSupported && location?.href) { return location.href; } else { return url; } }
 
-function coerceBody(data: string | ArrayBuffer) {
+export function coerceBody(data: string | ArrayBuffer) {
     return (textMode.value && typeof data !== "string") ? decode(data) : data;
 }
 

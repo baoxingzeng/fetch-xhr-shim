@@ -1,4 +1,4 @@
-import { fetchP } from "./fetch-api/fetchP";
+import { fetchP, coerceBody } from "./fetch-api/fetchP";
 import { Payload } from "./fetch-api/BodyImpl";
 import { createPhonyPayload } from "./fetch-api/RequestP";
 import { isBlob } from "./file-system/BlobP";
@@ -135,7 +135,7 @@ export function fixFetch(fetchFunc?: typeof fetch): typeof fetch {
                 }
 
                 payload.promise.then((function (this: typeof globalThis, r: string | ArrayBuffer) {
-                    init!.body = r !== "" ? r : null;
+                    init!.body = r !== "" ? coerceBody(r) : null;
                     if (!aborted) { resolve(fetchFn.call(this, input, init)); }
                     else { reject(new DOMException("The user aborted a request.", "AbortError")); }
                     processing = false;
@@ -206,7 +206,7 @@ export function fixXMLHttpRequest(XHRClass?: typeof XMLHttpRequest) {
                         console.warn("Illegal to set the 'withCredentials' property on 'XMLHttpRequest': The value may only be set if the object's state is UNSENT or OPENED.");
                     }
 
-                    _send.call(this, r !== "" ? r : undefined);
+                    _send.call(this, r !== "" ? coerceBody(r) : undefined);
                 }
                 state(this).aborted = false;
                 state(this).processing = false;
@@ -258,7 +258,7 @@ export function fixWebSocket(WSClass?: typeof WebSocket) {
             let payload = new Payload(data);
             payload.promise.then((function (this: WebSocket, r: string | ArrayBuffer) {
                 if (this.readyState !== 1 /* OPEN */) return;
-                _send.call(this, r);
+                _send.call(this, coerceBody(r));
             }).bind(this));
         } else {
             _send.call(this, data);
