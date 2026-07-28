@@ -255,10 +255,9 @@ export function fixWebSocket(WSClass?: typeof WebSocket) {
     const _send = Klass.prototype.send;
     Klass.prototype.send = function (data: string | ArrayBufferLike | Blob | ArrayBufferView): void {
         if (fullOverride.value ? isBlob(data) : isPolyfillType<Blob>("Blob", data)) {
-            let payload = new Payload(data);
-            payload.promise.then((function (this: WebSocket, r: string | ArrayBuffer) {
+            (data as Blob).arrayBuffer().then((function (this: WebSocket, r: ArrayBuffer) {
                 if (this.readyState !== 1 /* OPEN */) return;
-                _send.call(this, coerceBody(r));
+                _send.call(this, r);
             }).bind(this));
         } else {
             _send.call(this, data);
