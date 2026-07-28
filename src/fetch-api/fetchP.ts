@@ -5,7 +5,7 @@ import { decode } from "../file-system/BlobP";
 import { DOMException, checkArgsLength } from "../utils";
 import { isHeaders, normalizeName, normalizeValue, parseHeaders } from "./HeadersP";
 
-const mp = { XMLHttpRequest: (typeof XMLHttpRequest !== "undefined" && XMLHttpRequest) as typeof XMLHttpRequest || undefined };
+const mp = { XMLHttpRequest: /*#__PURE__*/function () { return (typeof XMLHttpRequest !== "undefined" && XMLHttpRequest) as typeof XMLHttpRequest || undefined; }() };
 export function setXMLHttpRequestClass(XHRClass: unknown) { mp.XMLHttpRequest = XHRClass as typeof XMLHttpRequest; }
 
 const textMode = { value: false };
@@ -124,12 +124,12 @@ function createAbortException() {
     return new DOMException("The user aborted a request.", "AbortError");
 }
 
-const locationSupported = typeof location !== "undefined" && !!location;
+const locationSupported = /*#__PURE__*/function () { return typeof location !== "undefined" && !!location; }();
 function fixUrl(url: string) { if (url === "" && locationSupported && location?.href) { return location.href; } else { return url; } }
 
 export function coerceBody(data: string | ArrayBuffer) {
     return (textMode.value && typeof data !== "string") ? decode(data) : data;
 }
 
-const fetchE = (typeof fetch !== "undefined" && fetch) as typeof fetch || fetchP;
+const fetchE = /*#__PURE__*/function () { return (typeof fetch !== "undefined" && fetch) as typeof fetch || fetchP; }();
 export { fetchE as fetch };

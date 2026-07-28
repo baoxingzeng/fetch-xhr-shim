@@ -335,5 +335,5 @@ export function createFormDataFromBinaryText(text: string, boundary?: string): F
     return formData;
 }
 
-const FormDataE = (typeof FormData !== "undefined" && FormData) as typeof FormData || FormDataP;
+const FormDataE = /*#__PURE__*/function () { return (typeof FormData !== "undefined" && FormData) as typeof FormData || FormDataP; }();
 export { FormDataE as FormData };

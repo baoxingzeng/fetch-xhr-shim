@@ -123,5 +123,5 @@ export function AbortSignal_abort(signal: AbortSignal, notify = true, reason?: a
     }
 }
 
-const AbortSignalE = (typeof AbortSignal !== "undefined" && AbortSignal) || AbortSignalP;
+const AbortSignalE = /*#__PURE__*/function () { return (typeof AbortSignal !== "undefined" && AbortSignal) || AbortSignalP; }();
 export { AbortSignalE as AbortSignal };

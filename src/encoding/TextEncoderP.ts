@@ -125,5 +125,5 @@ function encodeText(input: string, destination?: Uint8Array<ArrayBufferLike>) {
     };
 }
 
-const TextEncoderE = (typeof TextEncoder !== "undefined" && TextEncoder) || TextEncoderP;
+const TextEncoderE = /*#__PURE__*/function () { return (typeof TextEncoder !== "undefined" && TextEncoder) || TextEncoderP; }();
 export { TextEncoderE as TextEncoder };

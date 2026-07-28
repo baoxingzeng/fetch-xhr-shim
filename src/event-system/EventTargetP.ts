@@ -201,5 +201,5 @@ function isExternalEventTarget(value: unknown): value is EventTarget {
         && typeof value.removeEventListener === "function";
 }
 
-const EventTargetE = (typeof EventTarget !== "undefined" && EventTarget) || EventTargetP;
+const EventTargetE = /*#__PURE__*/function () { return (typeof EventTarget !== "undefined" && EventTarget) || EventTargetP; }();
 export { EventTargetE as EventTarget };

@@ -249,5 +249,5 @@ function isExternalURLSearchParams(value: unknown): value is URLSearchParams {
     );
 }
 
-const URLSearchParamsE = (typeof URLSearchParams !== "undefined" && URLSearchParams) || URLSearchParamsP;
+const URLSearchParamsE = /*#__PURE__*/function () { return (typeof URLSearchParams !== "undefined" && URLSearchParams) || URLSearchParamsP; }();
 export { URLSearchParamsE as URLSearchParams };

@@ -101,5 +101,5 @@ function state(target: ResponseP) {
     return target.__Response__;
 }
 
-const ResponseE = (typeof Response !== "undefined" && Response) || ResponseP;
+const ResponseE = /*#__PURE__*/function () { return (typeof Response !== "undefined" && Response) || ResponseP; }();
 export { ResponseE as Response };

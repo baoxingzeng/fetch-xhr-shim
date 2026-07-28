@@ -241,5 +241,5 @@ export function Uint8Array_toBase64(input: Uint8Array<ArrayBuffer>) {
     return output.join("");
 }
 
-const FileReaderE = (typeof FileReader !== "undefined" && FileReader) || FileReaderP;
+const FileReaderE = /*#__PURE__*/function () { return (typeof FileReader !== "undefined" && FileReader) || FileReaderP; }();
 export { FileReaderE as FileReader };

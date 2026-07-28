@@ -1,10 +1,11 @@
 // Safe fallback for Symbol.iterator and Symbol.toStringTag — uses native Symbol when available, string keys otherwise.
 export const _Symbol = {
-    iterator: ((typeof Symbol === "function" && Symbol.iterator) || "Symbol(Symbol.iterator)" as never) as typeof Symbol.iterator,
-    toStringTag: ((typeof Symbol === "function" && Symbol.toStringTag) || "Symbol(Symbol.toStringTag)" as never) as typeof Symbol.toStringTag,
+    iterator: /*#__PURE__*/function () { return (typeof Symbol === "function" && Symbol.iterator) || "Symbol(Symbol.iterator)"; }() as typeof Symbol.iterator,
+    toStringTag: /*#__PURE__*/function () { return (typeof Symbol === "function" && Symbol.toStringTag) || "Symbol(Symbol.toStringTag)"; }() as typeof Symbol.toStringTag,
 };
 
-export class DOMExceptionP extends Error {
+const _Error = /*#__PURE__*/function () { return Error; }();
+export class DOMExceptionP extends _Error {
     constructor(message?: string, name?: string) {
         super(message);
         if (name !== undefined) this.name = "" + name;
@@ -58,7 +59,7 @@ export function isPolyfillType<T>(name: string, value: unknown, strict = false):
         && (function (index: number) { return strict ? index === 0 : index > -1; })((value as TChainIsArray)[field].chain.indexOf(name));
 }
 
-const iteratorSupported = typeof Symbol === "function" && !!Symbol.iterator;
+const iteratorSupported = /*#__PURE__*/function () { return typeof Symbol === "function" && !!Symbol.iterator; }();
 export function isSequence(value: unknown): value is any[] {
     return Array.isArray(value) || (!!value
         && typeof value === "object"

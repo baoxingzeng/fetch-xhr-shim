@@ -179,5 +179,5 @@ export function normalizeMethod(method: string) {
     return methods.indexOf(upcased) > -1 ? upcased : method;
 }
 
-const RequestE = (typeof Request !== "undefined" && Request) || RequestP;
+const RequestE = /*#__PURE__*/function () { return (typeof Request !== "undefined" && Request) || RequestP; }();
 export { RequestE as Request };

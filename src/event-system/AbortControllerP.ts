@@ -25,5 +25,5 @@ function state(target: AbortControllerP) {
     return target.__AbortController__;
 }
 
-const AbortControllerE = (typeof AbortController !== "undefined" && AbortController) || AbortControllerP;
+const AbortControllerE = /*#__PURE__*/function () { return (typeof AbortController !== "undefined" && AbortController) || AbortControllerP; }();
 export { AbortControllerE as AbortController };

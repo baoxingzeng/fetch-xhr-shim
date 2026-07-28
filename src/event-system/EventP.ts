@@ -136,5 +136,5 @@ export function Event_setTrusted(event: Event, isTrusted: boolean) {
     s.isTrusted = `${getFuncName(createTrustedPropertyDescriptor)}:${isTrusted ? "YES" : "NO"}`;
 }
 
-const EventE = (typeof Event !== "undefined" && Event) || EventP;
+const EventE = /*#__PURE__*/function () { return (typeof Event !== "undefined" && Event) || EventP; }();
 export { EventE as Event };

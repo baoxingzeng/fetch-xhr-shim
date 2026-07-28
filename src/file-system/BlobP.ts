@@ -5,7 +5,7 @@ import { TextDecoder, isArrayBuffer, ArrayBuffer_isView } from "../encoding/Text
 export const encode = /*#__PURE__*/function () { return TextEncoder.prototype.encode.bind(new TextEncoder()); }();
 export const decode = /*#__PURE__*/function () { return TextDecoder.prototype.decode.bind(new TextDecoder()); }();
 
-const mp = { ReadableStream: (typeof ReadableStream !== "undefined" && ReadableStream) as typeof ReadableStream || undefined };
+const mp = { ReadableStream: /*#__PURE__*/function () { return (typeof ReadableStream !== "undefined" && ReadableStream) as typeof ReadableStream || undefined; }() };
 export function setReadableStreamClass(RSClass: unknown) { mp.ReadableStream = RSClass as typeof ReadableStream; }
 
 export class BlobP implements Blob {

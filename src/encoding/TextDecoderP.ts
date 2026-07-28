@@ -225,5 +225,5 @@ export function ArrayBuffer_isView(value: any): value is ArrayBufferView {
     return ArrayBuffer.isView ? ArrayBuffer.isView(value) : isArrayBufferView(value);
 }
 
-const TextDecoderE = (typeof TextDecoder !== "undefined" && TextDecoder) || TextDecoderP;
+const TextDecoderE = /*#__PURE__*/function () { return (typeof TextDecoder !== "undefined" && TextDecoder) || TextDecoderP; }();
 export { TextDecoderE as TextDecoder };

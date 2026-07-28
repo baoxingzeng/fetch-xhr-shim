@@ -197,5 +197,5 @@ export function createHeaders(headers?: HeadersInit): Headers {
     return new HeadersE(headers);
 }
 
-const HeadersE = (typeof Headers !== "undefined" && Headers) || HeadersP;
+const HeadersE = /*#__PURE__*/function () { return (typeof Headers !== "undefined" && Headers) || HeadersP; }();
 export { HeadersE as Headers };

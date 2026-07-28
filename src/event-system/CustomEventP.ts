@@ -35,5 +35,5 @@ function state<T>(target: CustomEventP<T>) {
     return target.__CustomEvent__;
 }
 
-const CustomEventE = (typeof CustomEvent !== "undefined" && CustomEvent) || CustomEventP;
+const CustomEventE = /*#__PURE__*/function () { return (typeof CustomEvent !== "undefined" && CustomEvent) || CustomEventP; }();
 export { CustomEventE as CustomEvent };
