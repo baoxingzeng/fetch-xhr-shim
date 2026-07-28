@@ -72,6 +72,10 @@ export function fixFetch(fetchFunc?: typeof fetch): typeof fetch {
         }
     }
 
+    function getSignal(val: unknown) {
+        return !!val && typeof val === "object" && "signal" in val && isEventTarget(val.signal) && val.signal;
+    }
+
     function _fetch(this: typeof globalThis, input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
         if (isPolyfillType<Request>("Request", input)) {
             let _input = input as Request;
@@ -124,14 +128,15 @@ export function fixFetch(fetchFunc?: typeof fetch): typeof fetch {
                     setContentType(init!, payload.type);
                 }
 
+                let signal = getSignal(init) || getSignal(input);
                 let removeFn: (() => void) | null = null;
                 let aborted = false;
                 let processing = true;
 
-                if (input && typeof input === "object" && "signal" in input && isEventTarget(input.signal)) {
+                if (signal) {
                     let abortFn = function () { if (processing) { aborted = true; } removeFn!(); }
-                    removeFn = function () { (input.signal as EventTarget).removeEventListener("abort", abortFn); }
-                    input.signal.addEventListener("abort", abortFn);
+                    removeFn = function () { signal.removeEventListener("abort", abortFn); }
+                    signal.addEventListener("abort", abortFn);
                 }
 
                 payload.promise.then((function (this: typeof globalThis, r: string | ArrayBuffer) {
