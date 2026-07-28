@@ -260,6 +260,12 @@ export function fixWebSocket(WSClass?: typeof WebSocket) {
     const _send = Klass.prototype.send;
     Klass.prototype.send = function (data: string | ArrayBufferLike | Blob | ArrayBufferView): void {
         if (fullOverride.value ? isBlob(data) : isPolyfillType<Blob>("Blob", data)) {
+            if (this.readyState === 0 /* CONNECTING */)
+                throw new DOMException("Failed to execute 'send' on 'WebSocket': Still in CONNECTING state.", "InvalidStateError");
+
+            if (this.readyState === 2 /* CLOSING */ || this.readyState === 3 /* CLOSED */)
+                return console.error("WebSocket is already in CLOSING or CLOSED state.");
+
             (data as Blob).arrayBuffer().then((function (this: WebSocket, r: ArrayBuffer) {
                 if (this.readyState !== 1 /* OPEN */) return;
                 _send.call(this, r);
