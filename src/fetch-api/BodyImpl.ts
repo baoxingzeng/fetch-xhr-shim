@@ -70,9 +70,9 @@ export class Payload {
         return this.length ?? 0;
     }
 
-    private _type = "";
-    private length?: number;
-    private calcLength?: () => number;
+    /** @internal */private _type = "";
+    /** @internal */private length?: number;
+    /** @internal */private calcLength?: () => number;
 
     text() { return this.promise.then(function (r) { return typeof r === "string" ? r : decode(r); }); }
     arrayBuffer() { return this.promise.then(function (r) { return isArrayBuffer(r) ? r : encode(r).buffer; }); }
