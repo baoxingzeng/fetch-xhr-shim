@@ -1,3 +1,4 @@
+export * from "./index";
 import { TextEncoderP } from "./encoding/TextEncoderP";
 import { TextDecoderP } from "./encoding/TextDecoderP";
 

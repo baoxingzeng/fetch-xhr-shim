@@ -117,13 +117,13 @@ export default [
         ],
     },
 
-    // IIFE (polyfill singlefile)
+    // UMD (polyfill singlefile)
     {
         input: "src/polyfill.ts",
         output: {
-            file: "dist/fetch-xhr-shim.polyfill.iife.js",
-            format: "iife",
-            // name: "PolyfillFetch",
+            file: "dist/fetch-xhr-shim.umd.js",
+            format: "umd",
+            name: "FetchXHR",
         },
         plugins: [
             typescript({
@@ -138,20 +138,20 @@ export default [
                 return {
                     name: "copy-polyfill",
                     closeBundle() {
-                        copyFileSync("dist/fetch-xhr-shim.polyfill.iife.js", "polyfill.js");
+                        copyFileSync("dist/fetch-xhr-shim.umd.js", "polyfill.js");
                     },
                 };
             })(),
         ],
     },
 
-    // IIFE (polyfill singlefile, minimized)
+    // UMD (polyfill singlefile, minimized)
     {
         input: "src/polyfill.ts",
         output: {
-            file: "dist/fetch-xhr-shim.polyfill.iife.min.js",
-            format: "iife",
-            // name: "PolyfillFetch",
+            file: "dist/fetch-xhr-shim.umd.min.js",
+            format: "umd",
+            name: "FetchXHR",
         },
         plugins: [
             typescript({
