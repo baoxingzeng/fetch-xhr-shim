@@ -7,7 +7,7 @@ import typescript from "@rollup/plugin-typescript";
 export default [
     // CommonJS
     {
-        input: ["src/index.ts", "src/dev.ts", "src/polyfill.ts"],
+        input: ["src/index.ts", "src/helpers.ts", "src/internal.ts", "src/polyfill.ts"],
         output: {
             dir: "dist/cjs",
             format: "cjs",
@@ -63,7 +63,7 @@ export default [
 
     // ES6
     {
-        input: ["src/index.ts", "src/dev.ts", "src/polyfill.ts"],
+        input: ["src/index.ts", "src/helpers.ts", "src/internal.ts", "src/polyfill.ts"],
         output: {
             dir: "dist/esm",
             format: "es",
@@ -176,11 +176,21 @@ export default [
         plugins: [dts()],
     },
 
-    // Types (dev)
+    // Types (helpers)
     {
-        input: "dist/esm/types/dev.d.ts",
+        input: "dist/esm/types/helpers.d.ts",
         output: {
-            file: "dist/dev.d.ts",
+            file: "dist/helpers.d.ts",
+            format: "es",
+        },
+        plugins: [dts()],
+    },
+
+    // Types (internal)
+    {
+        input: "dist/esm/types/internal.d.ts",
+        output: {
+            file: "dist/internal.d.ts",
             format: "es",
         },
         plugins: [dts()],

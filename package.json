@@ -8,11 +8,15 @@
   "type": "module",
   "main": "dist/fetch-xhr-shim.cjs.js",
   "module": "dist/fetch-xhr-shim.esm.js",
+  "unpkg": "dist/fetch-xhr-shim.umd.js",
+  "jsdelivr": "dist/fetch-xhr-shim.umd.js",
   "types": "dist/index.d.ts",
   "files": [
     "README.md",
     "dist",
     "polyfill.js",
+    "helpers",
+    "internal",
     "!dist/types/**/*",
     "!dist/cjs/types/**/*",
     "!dist/esm/types/**/*"
@@ -23,14 +27,20 @@
       "import": "./dist/esm/index.js",
       "types": "./dist/index.d.ts"
     },
-    "./dev": {
-      "require": "./dist/cjs/dev.js",
-      "import": "./dist/esm/dev.js",
-      "types": "./dist/dev.d.ts"
-    },
     "./polyfill": {
       "require": "./dist/cjs/polyfill.js",
-      "import": "./dist/esm/polyfill.js"
+      "import": "./dist/esm/polyfill.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./helpers": {
+      "require": "./dist/cjs/helpers.js",
+      "import": "./dist/esm/helpers.js",
+      "types": "./dist/helpers.d.ts"
+    },
+    "./internal": {
+      "require": "./dist/cjs/internal.js",
+      "import": "./dist/esm/internal.js",
+      "types": "./dist/internal.d.ts"
     }
   },
   "sideEffects": [
