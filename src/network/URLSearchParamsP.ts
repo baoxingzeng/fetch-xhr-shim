@@ -245,7 +245,8 @@ function isExternalURLSearchParams(value: unknown): value is URLSearchParams {
     return isObjectType<URLSearchParams>("URLSearchParams", value) || (
         !!value &&
         typeof value === "object" && "size" in value &&
-        typeof value.size === "number" &&
+        typeof value.size === "number" && "forEach" in value &&
+        typeof value.forEach === "function" &&
         typeof URLSearchParams === "function" && value instanceof URLSearchParams
     );
 }
