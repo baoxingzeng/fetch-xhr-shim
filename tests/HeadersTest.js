@@ -104,6 +104,7 @@ test("Headers traversal methods: keys/values/entries/forEach (keys in lowercase)
         ["Accept", "text/plain"],
         ["X-Custom", "test"]
     ]);
+
     assert.equal(
         JSON.stringify(Array.from(headers.keys()).sort()),
         JSON.stringify(["accept", "content-type", "x-custom"]),

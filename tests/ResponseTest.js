@@ -108,6 +108,7 @@ test("Request → Response linkage: simulate Request Response process", async ()
         status: 200,
         headers: { "Content-Type": "application/json" }
     });
+
     let resBody = await res.json();
     assert.equal(resBody.name, "张三");
     assert.equal(res.ok, true);

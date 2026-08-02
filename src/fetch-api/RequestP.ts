@@ -11,8 +11,7 @@ export class RequestP extends BodyImpl implements Request {
         setState(this, "__Request__", new RequestState());
         const s = state(this);
 
-        let _init = init ?? {};
-        if (typeof _init !== "object") {
+        let _init = init ?? {}; if (typeof _init !== "object") {
             throw new TypeError("Failed to construct 'Request': The provided value is not of type 'RequestInit'.");
         }
 
@@ -150,7 +149,6 @@ export function createPhonyPayload(request: Request): Payload {
             }
         }
     }
-
     if (!payload.promise) {
         throw new TypeError("Failed to construct 'Request': Failed to read request body data, underlying data is in an invalid format.");
     }
@@ -173,7 +171,6 @@ function clearCache(req: RequestP) {
 
 // HTTP methods whose capitalization should be normalized
 const methods = ["CONNECT", "DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT", "TRACE"];
-
 export function normalizeMethod(method: string) {
     let upcased = method.toUpperCase();
     return methods.indexOf(upcased) > -1 ? upcased : method;

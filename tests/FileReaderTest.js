@@ -105,8 +105,7 @@ test("abort interrupt file reading", async () => {
 test("FileReader event triggering sequence", async () => {
     let file = new Subordinate.File(["test"], "event.txt");
     let reader = new Protagonist.FileReader();
-    let events = [];
-    ["loadstart", "load", "loadend"].forEach(event => {
+    let events = [];["loadstart", "load", "loadend"].forEach(event => {
         reader.addEventListener(event, () => events.push(event));
     });
     let loadendPromise = new Promise(resolve => { reader.onloadend = evt => resolve(evt); });

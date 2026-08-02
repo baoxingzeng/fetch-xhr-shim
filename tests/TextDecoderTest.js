@@ -60,6 +60,7 @@ test("decode stream mode: pass in complete bytes in two batches", () => {
     let partial1 = new Uint8Array([228, 189]);
     let partial2 = new Uint8Array([160, 229, 165, 189]);
     let decoder = new Protagonist.TextDecoder();
+
     assert.equal(decoder.decode(partial1, { stream: true }), "");
     assert.equal(decoder.decode(partial2), "你好");
 });
@@ -81,6 +82,7 @@ test("decode utf-8 bytes with BOM", () => {
     let withoutBOM = new Uint8Array([72, 101, 108, 108, 111]);
     let decoder1 = new Protagonist.TextDecoder();
     let decoder2 = new Protagonist.TextDecoder("utf-8", { ignoreBOM: false });
+
     assert.equal(decoder1.decode(withBOM), "Hello");
     assert.equal(decoder2.decode(withBOM), "Hello");
     assert.equal(decoder1.decode(withoutBOM), "Hello");

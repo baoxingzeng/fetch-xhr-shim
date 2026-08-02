@@ -24,6 +24,7 @@ test("Request basic construction (URL + configuration items)", () => {
         "Content-Type": "application/json",
         "X-Test": "polyfill"
     });
+
     let req2 = new Protagonist.Request("https://test.com/post", {
         method: "POST",
         headers: customHeaders,
@@ -103,6 +104,7 @@ test("clone clone instance", async () => {
         body: "clone test",
         headers: { "X-Clone": "true" }
     });
+
     let clonedReq = req.clone();
     assert.equal(clonedReq.url, req.url);
     assert.equal(clonedReq.method, req.method);

@@ -70,9 +70,8 @@ export class HeadersP implements Headers {
 
     forEach(callbackfn: (value: string, key: string, parent: Headers) => void, thisArg?: any): void {
         checkArgsFn(arguments.length, 1, "forEach");
-        if (typeof callbackfn !== "function") {
+        if (typeof callbackfn !== "function")
             throw new TypeError("Failed to execute 'forEach' on 'Headers': parameter 1 is not of type 'Function'.");
-        }
         let dict = state(this).dict;
         let names = Object.getOwnPropertyNames(dict);
         for (let i = 0; i < names.length; ++i) {

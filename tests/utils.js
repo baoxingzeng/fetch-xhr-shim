@@ -72,7 +72,7 @@ export function ui_rec(title, name, test) {
  * @param {boolean} value 
  * @param {string} name 
  */
-function setResult(title,  value, name) {
+function setResult(title, value, name) {
     /**
      * @type {[boolean, string][]}
      */
@@ -102,9 +102,7 @@ function print(...data) {
  */
 
 export class Notify {
-    /**
-     * @type {TListener[]}
-     */
+    /** @type {TListener[]} */
     static listeners = [];
 
     /**

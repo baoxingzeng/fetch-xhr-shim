@@ -22,10 +22,7 @@ test("Event basic construction and read-only properties", () => {
     assert.equal(event1.target, null);
     assert.equal(event1.currentTarget, null);
     assert.equal(event1.defaultPrevented, false);
-    let event2 = new Protagonist.Event("custom", {
-        bubbles: true,
-        cancelable: true
-    });
+    let event2 = new Protagonist.Event("custom", { bubbles: true, cancelable: true });
     assert.equal(event2.type, "custom");
     assert.equal(event2.cancelable, true);
     assert.equal(event2.bubbles, true);

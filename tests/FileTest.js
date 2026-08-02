@@ -39,8 +39,7 @@ test("lastModified custom value + default value", () => {
     let file1 = new Protagonist.File([], "custom.txt", { lastModified: 1719235200000 });
     compare(file1, "custom.txt", 1719235200000);
     let before = Date.now();
-    let file2 = new Protagonist.File([], "default.txt");
-    let after = Date.now();
+    let file2 = new Protagonist.File([], "default.txt"), after = Date.now();
     assert.ok(file2.lastModified >= before && file2.lastModified <= after);
 });
 
